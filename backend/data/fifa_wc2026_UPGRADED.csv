@@ -1,0 +1,49 @@
+Team,Group,Confederation,Host,FIFA_Ranking_Apr2026,Recent_Form_W,Recent_Form_D,Recent_Form_L,Goals_Scored_Last10,Goals_Conceded_Last10,xG_For_Last10,xG_Against_Last10,Clean_Sheets_Last10,Away_Form_W,Away_Form_D,Away_Form_L,Key_Player,Star_Player_Rating,Team_Experience_Score,Coach_Experience_Yrs,Squad_Market_Value_MUSD,Continental_Strength_Index,Avg_Squad_Age,Players_In_Top5_Leagues,World_Cup_Appearances,Defending_Champion,H2H_Win_Rate_vs_Group,Group_Difficulty_Index,Home_Advantage,Predicted_Win_Probability,Predicted_Stage
+France,I,UEFA,No,1,4,1,0,16,4,14.8,4.2,5,3,1,1,Kylian Mbappé,9.5,9.5,14,1344,9.0,26.5,22,17,No,0.79,5.5,No,0.160,Winner
+Spain,H,UEFA,No,2,4,1,0,15,3,14.5,3.2,6,3,1,1,Lamine Yamal,9.0,9.0,5,1103,9.0,24.5,22,16,No,0.82,3.5,No,0.150,Final
+Argentina,J,CONMEBOL,No,3,4,1,0,14,4,13.2,4.0,5,3,1,1,Julián Álvarez,8.5,9.8,8,840,8.5,27.5,18,19,Yes,0.82,5.0,No,0.130,Final
+England,L,UEFA,No,4,3,1,1,14,5,13.5,4.8,4,2,1,2,Jude Bellingham,9.0,8.5,6,1365,9.0,26.0,23,17,No,0.78,5.0,No,0.105,Semifinal
+Portugal,K,UEFA,No,5,4,0,1,13,5,12.8,4.5,4,3,0,2,Bruno Fernandes,8.5,8.0,10,1155,9.0,27.0,21,9,No,0.76,5.5,No,0.080,Quarterfinal
+Brazil,C,CONMEBOL,No,6,3,1,1,14,5,13.5,4.8,4,2,1,2,Vinícius Júnior,9.0,9.8,12,998,8.5,26.0,19,23,No,0.73,4.5,No,0.120,Semifinal
+Netherlands,F,UEFA,No,7,3,2,0,12,5,11.8,4.8,4,2,2,1,Cody Gakpo,8.0,8.5,8,945,9.0,26.5,21,12,No,0.75,5.0,No,0.070,Quarterfinal
+Morocco,C,CAF,No,8,3,1,1,10,5,9.5,4.8,4,2,1,2,Achraf Hakimi,8.0,7.0,4,263,7.0,26.0,16,10,No,0.72,4.5,No,0.028,Round of 16
+Belgium,G,UEFA,No,9,3,1,1,11,6,10.5,5.5,3,2,1,2,Kevin De Bruyne,8.0,8.0,8,735,9.0,27.5,22,15,No,0.76,4.5,No,0.048,Quarterfinal
+Germany,E,UEFA,No,10,3,2,0,12,4,11.5,4.0,5,2,2,1,Florian Wirtz,8.5,9.5,5,746,9.0,25.5,22,21,No,0.77,4.0,No,0.072,Quarterfinal
+Croatia,L,UEFA,No,11,3,1,1,10,6,9.8,5.8,3,2,1,2,Mateo Kovačić,7.5,8.0,9,420,9.0,28.5,20,9,No,0.65,6.0,No,0.040,Round of 16
+Senegal,I,CAF,No,12,4,0,1,11,5,10.2,4.8,3,3,0,2,Sadio Mané,7.5,6.5,11,231,7.0,26.5,17,4,No,0.58,7.0,No,0.022,Round of 16
+Colombia,K,CONMEBOL,No,13,3,2,0,11,5,10.5,4.8,4,2,2,1,Luis Díaz,8.0,7.0,4,473,8.5,26.5,18,7,No,0.63,6.5,No,0.020,Round of 16
+Mexico,A,Concacaf (Host),Yes,15,3,1,1,10,6,9.5,5.8,3,2,1,2,Hirving Lozano,7.0,8.0,8,368,7.5,27.0,14,18,No,0.62,4.5,Yes,0.030,Round of 16
+USA,D,Concacaf (Host),Yes,16,3,1,1,11,6,10.5,5.8,3,2,1,2,Christian Pulisic,7.5,7.5,3,525,7.5,26.5,16,11,No,0.56,6.5,Yes,0.038,Round of 16
+Uruguay,H,CONMEBOL,No,17,3,1,1,10,6,9.8,5.5,3,2,1,2,Darwin Núñez,8.0,9.0,8,368,8.5,27.0,18,14,No,0.64,5.0,No,0.018,Round of 16
+Switzerland,B,UEFA,No,18,3,1,1,9,5,8.8,4.8,4,2,1,2,Granit Xhaka,7.5,7.5,5,473,9.0,27.5,18,12,No,0.71,4.0,No,0.022,Round of 16
+Japan,F,AFC,No,19,3,2,0,11,5,10.5,4.8,4,2,2,1,Kaoru Mitoma,7.5,6.5,8,336,6.5,27.0,17,8,No,0.54,6.5,No,0.015,Round of 16
+Iran,G,AFC,No,20,2,2,1,8,6,7.8,5.8,3,1,2,2,Sardar Azmoun,7.0,6.0,4,84,6.5,27.5,8,7,No,0.60,5.5,No,0.010,Group
+South Korea,A,AFC,No,22,3,1,1,9,6,8.8,5.8,3,2,1,2,Son Heung-min,8.0,7.5,8,294,6.5,27.5,15,11,No,0.59,5.0,No,0.012,Group
+Ecuador,E,CONMEBOL,No,23,2,2,1,8,7,7.8,6.5,3,1,2,2,Moisés Caicedo,7.5,5.5,5,189,8.5,26.5,12,5,No,0.53,5.0,No,0.010,Group
+Austria,J,UEFA,No,24,3,1,1,10,6,9.5,5.8,3,2,1,2,Marcel Sabitzer,7.0,6.0,15,494,9.0,27.0,19,8,No,0.50,7.0,No,0.012,Group
+Türkiye,D,UEFA,No,25,2,2,1,8,7,7.8,6.5,3,1,2,2,Hakan Çalhanoğlu,8.0,6.5,8,410,9.0,26.5,16,3,No,0.52,7.0,No,0.010,Group
+Australia,D,AFC,No,27,2,2,1,8,7,7.5,6.5,3,1,2,2,Mathew Leckie,6.5,6.0,3,137,6.5,27.0,14,6,No,0.50,7.0,No,0.008,Group
+Algeria,J,CAF,No,28,2,2,1,9,7,8.5,6.5,3,1,2,2,Ismaël Bennacer,7.0,6.0,5,210,7.0,27.5,14,5,No,0.50,7.0,No,0.010,Group
+Canada,B,Concacaf (Host),Yes,30,2,2,1,8,7,7.5,6.8,2,1,2,2,Alphonso Davies,8.0,5.0,3,252,7.5,26.5,16,3,No,0.56,4.5,Yes,0.018,Group
+Egypt,G,CAF,No,31,2,2,1,8,7,7.8,6.5,3,1,2,2,Mohamed Salah,8.5,7.0,3,168,7.0,27.5,13,4,No,0.56,6.0,No,0.010,Group
+Norway,I,UEFA,No,32,3,1,1,12,6,11.5,5.5,3,2,1,2,Erling Haaland,9.5,5.0,6,650,9.0,26.5,16,4,No,0.44,7.5,No,0.015,Group
+Panama,L,Concacaf,No,33,2,1,2,5,9,4.8,8.5,2,1,1,3,Rolando Blackburn,6.0,5.0,5,47,6.0,28.0,12,2,No,0.35,7.5,No,0.004,Group
+Ivory Coast,E,CAF,No,37,3,1,1,10,6,9.2,5.8,3,2,1,2,Sébastien Haller,7.0,6.5,2,242,7.0,27.0,14,4,No,0.48,6.0,No,0.007,Group
+Scotland,C,UEFA,No,38,2,1,2,7,8,6.8,7.5,2,1,1,3,Andy Robertson,7.0,5.5,7,294,9.0,27.5,17,9,No,0.39,7.0,No,0.005,Group
+Paraguay,D,CONMEBOL,No,40,2,1,2,7,8,6.8,7.5,2,1,1,3,Julio Enciso,6.5,6.5,4,147,8.5,27.5,13,9,No,0.43,7.5,No,0.005,Group
+Sweden,F,UEFA,No,42,2,1,2,7,8,6.8,7.5,2,1,1,3,Alexander Isak,7.5,7.0,4,368,9.0,27.0,17,13,No,0.38,7.5,No,0.006,Group
+Czechia,A,UEFA,No,43,2,1,2,7,8,6.8,7.5,2,1,1,3,Tomáš Souček,7.0,6.5,2,347,9.0,28.0,16,9,No,0.46,6.5,No,0.006,Group
+Tunisia,F,CAF,No,47,2,1,2,7,9,6.5,8.2,2,1,1,3,Wahbi Khazri,6.5,5.5,4,84,7.0,28.0,10,8,No,0.35,7.5,No,0.004,Group
+Congo DR,K,CAF,No,48,2,1,2,6,8,5.8,7.5,2,1,1,3,Chancel Mbemba,6.5,4.5,3,58,7.0,27.0,10,2,No,0.35,8.0,No,0.003,Group
+Uzbekistan,K,AFC,No,50,2,1,2,5,9,4.8,8.5,1,1,1,3,Jaloliddin Masharipov,6.0,3.5,3,34,6.5,26.5,6,1,No,0.35,8.0,No,0.003,Group
+Qatar,B,AFC,No,55,2,1,2,7,9,6.5,8.5,2,1,1,3,Akram Afif,6.5,4.5,4,53,6.5,27.0,10,2,No,0.39,5.5,No,0.004,Group
+Iraq,I,AFC,No,57,1,2,2,5,9,4.8,8.5,2,0,2,3,Mohanad Ali,6.0,4.5,5,58,6.5,27.5,8,2,No,0.24,9.5,No,0.003,Group
+South Africa,A,CAF,No,60,2,1,2,7,9,6.5,8.5,2,1,1,3,Percy Tau,6.5,5.5,8,79,7.0,28.0,10,4,No,0.34,7.5,No,0.004,Group
+Saudi Arabia,H,AFC,No,61,2,1,2,6,8,5.8,7.8,2,1,1,3,Salem Al-Dawsari,7.0,5.0,4,100,6.5,27.5,9,7,No,0.32,8.0,No,0.004,Group
+Jordan,J,AFC,No,63,1,2,2,5,10,4.8,9.2,1,0,2,3,Musa Al-Taamari,6.0,3.0,3,37,6.5,27.0,7,1,No,0.23,9.0,No,0.002,Group
+Bosnia and Herzegovina,B,UEFA,No,65,2,1,2,7,8,6.5,7.5,2,1,1,3,Edin Džeko,6.5,4.5,2,179,9.0,28.5,14,2,No,0.34,6.5,No,0.004,Group
+Cabo Verde,H,CAF,No,69,1,2,2,5,9,4.8,8.5,2,0,2,3,Ryan Mendes,6.0,3.0,5,40,7.0,27.5,10,1,No,0.26,8.5,No,0.002,Group
+Ghana,L,CAF,No,74,1,2,2,5,9,4.8,8.8,2,0,2,3,Mohammed Kudus,7.0,6.0,2,126,7.0,27.5,13,5,No,0.28,9.5,No,0.004,Group
+Curaçao,E,Concacaf,No,82,1,1,3,4,10,3.8,9.5,1,0,1,4,Leandro Bacuna,6.0,3.0,5,29,6.0,28.0,8,1,No,0.22,9.0,No,0.001,Group
+Haiti,C,Concacaf,No,83,1,1,3,4,11,3.8,10.2,1,0,1,4,Duckens Nazon,5.5,4.0,2,24,6.0,28.0,7,2,No,0.15,9.5,No,0.001,Group
+New Zealand,G,OFC,No,85,1,1,3,4,11,3.8,10.5,1,0,1,4,Chris Wood,6.0,3.0,3,19,4.5,27.5,5,3,No,0.11,9.0,No,0.001,Group
