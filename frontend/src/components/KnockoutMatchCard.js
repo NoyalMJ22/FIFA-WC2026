@@ -1,108 +1,165 @@
 "use client";
 import { motion } from "framer-motion";
+import { getTeamFlag, getShortTeamName } from "@/lib/teamFlags";
 
-const TEAM_FLAGS = {
-  Argentina: "ar", Brazil: "br", France: "fr", England: "gb-eng",
-  Spain: "es", Germany: "de", Portugal: "pt", Netherlands: "nl",
-  Italy: "it", Croatia: "hr", Uruguay: "uy", Morocco: "ma",
-  USA: "us", Colombia: "co", Mexico: "mx", Switzerland: "ch",
-  Senegal: "sn", Japan: "jp", Denmark: "dk", Iran: "ir",
-  "South Korea": "kr", Australia: "au", Ukraine: "ua", Austria: "at",
-  Sweden: "se", Serbia: "rs", Poland: "pl", Peru: "pe",
-  Scotland: "gb-sct", Wales: "gb-wls", Ecuador: "ec", Cameroon: "cm",
-  Hungary: "hu", Canada: "ca", Chile: "cl", Egypt: "eg",
-  Nigeria: "ng", Mali: "ml", "Ivory Coast": "ci", Algeria: "dz",
-  "Saudi Arabia": "sa", Qatar: "qa", Norway: "no",
-  Czechia: "cz", Slovakia: "sk", Romania: "ro", Paraguay: "py",
-  "Costa Rica": "cr", Tunisia: "tn", Ghana: "gh", Bolivia: "bo",
-  "Curaçao": "cw", Haiti: "ht", "New Zealand": "nz",
-  "Bosnia and Herzegovina": "ba", "Cabo Verde": "cv",
-  "Congo DR": "cd", Uzbekistan: "uz", Jordan: "jo",
-  Türkiye: "tr", "South Africa": "za", Iraq: "iq",
-};
-
-function getTeamFlag(name) {
-  const code = TEAM_FLAGS[name] || "xx";
-  return `https://flagcdn.com/w40/${code}.png`;
+function handleFlagError(e) {
+  e.target.style.display = "none";
 }
 
-export default function MatchCard({ match, index = 0, side = "left", highlight = false, isDimmed = false }) {
-  const isTeam1Winner = match.winner === match.team1;
-  const isTeam2Winner = match.winner === match.team2;
+export default function KnockoutMatchCard({ match, index = 0, side = "left", isFinal, compact = false }) {
+  const w1 = match?.winner === match?.team1;
+  const w2 = match?.winner === match?.team2;
+  const hasTeam1 = match?.team1 && match.team1.trim() !== "";
+  const hasTeam2 = match?.team2 && match.team2.trim() !== "";
+
+  if (!match || (!hasTeam1 && !hasTeam2)) return null;
+
+  if (compact) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: side === "left" ? -10 : 10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.02 }}
+        whileHover={{ scale: 1.05 }}
+        className="w-[150px] h-[60px] px-3 rounded-xl bg-gradient-to-r from-white/5 to-white/10 border border-white/10 backdrop-blur-md flex flex-col justify-center transition-all duration-300 hover:scale-105 hover:border-cyan-400/40 shadow-[0_0_15px_rgba(0,255,255,0.1)]"
+      >
+        {hasTeam1 && (
+          <div className={`flex items-center justify-between text-sm h-[22px] ${w1 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+            <div className="flex items-center gap-2">
+              <img
+                src={getTeamFlag(match.team1)}
+                alt={match.team1}
+                className="w-5 h-4 object-cover rounded-sm"
+                onError={handleFlagError}
+              />
+              <span className={`truncate max-w-[80px] ${w1 ? "text-green-300 font-medium" : "text-white/90 font-medium"}`}>
+                {getShortTeamName(match.team1)}
+              </span>
+            </div>
+            <span className={`text-cyan-400 font-bold text-sm ${w1 ? "text-green-400" : "text-white/50"}`}>
+              {match.score1 ?? "0"}
+            </span>
+          </div>
+        )}
+        {hasTeam1 && hasTeam2 && <div className="h-px bg-white/10 my-1" />}
+        {hasTeam2 && (
+          <div className={`flex items-center justify-between text-sm h-[22px] ${w2 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+            <div className="flex items-center gap-2">
+              <img
+                src={getTeamFlag(match.team2)}
+                alt={match.team2}
+                className="w-5 h-4 object-cover rounded-sm"
+                onError={handleFlagError}
+              />
+              <span className={`truncate max-w-[80px] ${w2 ? "text-green-300 font-medium" : "text-white/90 font-medium"}`}>
+                {getShortTeamName(match.team2)}
+              </span>
+            </div>
+            <span className={`text-cyan-400 font-bold text-sm ${w2 ? "text-green-400" : "text-white/50"}`}>
+              {match.score2 ?? "0"}
+            </span>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
+
+  if (isFinal) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        whileHover={{ scale: 1.02 }}
+        className="w-[180px] h-[70px] px-4 rounded-xl bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 border border-yellow-400/40 backdrop-blur-md flex flex-col justify-center shadow-[0_0_25px_rgba(255,215,0,0.3)] transition-all duration-300"
+      >
+        {hasTeam1 && (
+          <div className={`flex items-center justify-between text-sm h-[24px] ${w1 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+            <div className="flex items-center gap-2">
+              <img
+                src={getTeamFlag(match.team1)}
+                alt={match.team1}
+                className="w-5 h-4 object-cover rounded-sm"
+                onError={handleFlagError}
+              />
+              <span className={`truncate max-w-[90px] ${w1 ? "text-green-300 font-semibold" : "text-white/90 font-medium"}`}>
+                {getShortTeamName(match.team1)}
+              </span>
+            </div>
+            <span className={`text-cyan-400 font-bold ${w1 ? "text-green-400" : "text-white/60"}`}>
+              {match.score1 ?? "-"}
+            </span>
+          </div>
+        )}
+        {hasTeam1 && hasTeam2 && <div className="h-px bg-yellow-400/20 my-1" />}
+        {hasTeam2 && (
+          <div className={`flex items-center justify-between text-sm h-[24px] ${w2 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+            <div className="flex items-center gap-2">
+              <img
+                src={getTeamFlag(match.team2)}
+                alt={match.team2}
+                className="w-5 h-4 object-cover rounded-sm"
+                onError={handleFlagError}
+              />
+              <span className={`truncate max-w-[90px] ${w2 ? "text-green-300 font-semibold" : "text-white/90 font-medium"}`}>
+                {getShortTeamName(match.team2)}
+              </span>
+            </div>
+            <span className={`text-cyan-400 font-bold ${w2 ? "text-green-400" : "text-white/60"}`}>
+              {match.score2 ?? "-"}
+            </span>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0, x: side === "left" ? -10 : 10 }}
-      animate={{ opacity: isDimmed ? 0.3 : 1, x: 0 }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: index * 0.02 }}
-      whileHover={{ scale: isDimmed ? 1 : 1.02 }}
-      className={`
-        relative p-1.5 rounded-lg w-[130px] h-[50px]
-        bg-gradient-to-b from-[#1a1f3a] to-[#0f1225]
-        border border-white/[0.06] hover:border-fifa-green/40
-        transition-all duration-200 cursor-pointer
-        hover:shadow-[0_0_15px_rgba(0,255,135,0.1)]
-        group
-        ${isDimmed ? 'inactive' : ''}
-      `}
-      style={{
-        boxShadow: highlight 
-          ? "0 0 20px rgba(255, 215, 0, 0.15), inset 0 0 20px rgba(255, 215, 0, 0.03)"
-          : "inset 0 1px 0 rgba(255,255,255,0.05)",
-      }}
+      whileHover={{ scale: 1.05 }}
+      className="w-[160px] h-[64px] px-3 py-2 rounded-xl bg-gradient-to-r from-white/5 to-white/10 border border-white/10 backdrop-blur-md flex flex-col justify-center transition-all duration-300 hover:scale-105 hover:border-cyan-400/40 shadow-[0_0_15px_rgba(0,255,255,0.1)]"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-fifa-green/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg" />
-      
-      <div className="relative">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[6px] text-gray-500 uppercase tracking-wider truncate">
-            {match.match_id?.replace(/_/g, " ") || "Match"}
-          </span>
-        </div>
-
-        <div className="space-y-0.5">
-          <div className={`flex items-center gap-1 ${isTeam1Winner ? "text-fifa-green" : "text-gray-300"}`}>
+      {hasTeam1 && (
+        <div className={`flex items-center justify-between text-sm h-[24px] ${w1 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+          <div className="flex items-center gap-2 min-w-0">
             <img
               src={getTeamFlag(match.team1)}
               alt={match.team1}
-              className="w-4 h-2.5 object-cover rounded flex-shrink-0"
-              onError={(e) => { e.target.style.display = "none"; }}
+              className="w-5 h-4 object-cover rounded-sm flex-shrink-0"
+              onError={handleFlagError}
             />
-            <span className="text-[9px] font-medium truncate flex-1">
-              {match.team1}
-            </span>
-            <span className="text-[9px] text-gray-500 font-mono">
-              {match.score1 ?? "–"}
+            <span className={`truncate max-w-[80px] ${w1 ? "text-green-300 font-semibold" : "text-white/90 font-medium"}`}>
+              {getShortTeamName(match.team1)}
             </span>
           </div>
+          <span className={`text-cyan-400 font-bold ${w1 ? "text-green-400" : "text-white/50"}`}>
+            {match.score1 ?? "-"}
+          </span>
+        </div>
+      )}
 
-          <div className={`flex items-center gap-1 ${isTeam2Winner ? "text-fifa-green" : "text-gray-300"}`}>
+      {hasTeam1 && hasTeam2 && <div className="h-px bg-white/10 my-1" />}
+
+      {hasTeam2 && (
+        <div className={`flex items-center justify-between text-sm h-[24px] ${w2 ? "bg-green-500/20 rounded-md px-1 shadow-[0_0_10px_rgba(0,255,150,0.4)]" : ""}`}>
+          <div className="flex items-center gap-2 min-w-0">
             <img
               src={getTeamFlag(match.team2)}
               alt={match.team2}
-              className="w-4 h-2.5 object-cover rounded flex-shrink-0"
-              onError={(e) => { e.target.style.display = "none"; }}
+              className="w-5 h-4 object-cover rounded-sm flex-shrink-0"
+              onError={handleFlagError}
             />
-            <span className="text-[9px] font-medium truncate flex-1">
-              {match.team2}
-            </span>
-            <span className="text-[9px] text-gray-500 font-mono">
-              {match.score2 ?? "–"}
+            <span className={`truncate max-w-[80px] ${w2 ? "text-green-300 font-semibold" : "text-white/90 font-medium"}`}>
+              {getShortTeamName(match.team2)}
             </span>
           </div>
+          <span className={`text-cyan-400 font-bold ${w2 ? "text-green-400" : "text-white/50"}`}>
+            {match.score2 ?? "-"}
+          </span>
         </div>
-      </div>
-
-      {(isTeam1Winner || isTeam2Winner) && (
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.3, delay: 0.1 + index * 0.02 }}
-          className="absolute bottom-0 left-0 right-0 h-0.5 origin-left rounded-full"
-          style={{
-            background: `linear-gradient(90deg, ${isTeam1Winner ? "#00ff87" : "#7c3aed"}, transparent)`,
-          }}
-        />
       )}
     </motion.div>
   );

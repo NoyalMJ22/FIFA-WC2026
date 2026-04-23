@@ -20,7 +20,6 @@ export default function GroupsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  // Organize teams by group
   const groupedTeams = {};
   teams.forEach((t) => {
     if (!groupedTeams[t.group]) groupedTeams[t.group] = [];
@@ -43,7 +42,7 @@ export default function GroupsPage() {
     <div className="animated-bg min-h-screen">
       <Navbar />
 
-      <main className="pt-24 pb-16 px-4 max-w-7xl mx-auto">
+      <main className="pt-24 pb-16 px-4 max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,14 +66,16 @@ export default function GroupsPage() {
           transition={{ delay: 0.3 }}
           className="text-center mb-10"
         >
-          <button
+          <motion.button
             onClick={handleSimulate}
             disabled={simulating || loading}
-            className="px-8 py-3 rounded-xl font-heading font-semibold text-sm tracking-wider bg-fifa-green text-black hover:shadow-[0_0_30px_rgba(0,255,135,0.4)] transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+            className="btn-primary"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
           >
             {simulating ? (
               <span className="flex items-center gap-2">
-                <span className="spinner !w-4 !h-4 !border-2 !border-black/20 !border-t-black" />
+                <span className="spinner" style={{ width: 16, height: 16, borderWidth: 2, borderColor: "rgba(0,0,0,0.15)", borderTopColor: "#000" }} />
                 SIMULATING...
               </span>
             ) : standings ? (
@@ -82,7 +83,7 @@ export default function GroupsPage() {
             ) : (
               "🚀 SIMULATE GROUP STAGE"
             )}
-          </button>
+          </motion.button>
         </motion.div>
 
         {/* Qualification Summary */}
@@ -90,11 +91,12 @@ export default function GroupsPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-4 mb-8 max-w-xl mx-auto text-center"
+            className="insight-card mb-8 max-w-xl mx-auto text-center"
           >
-            <p className="text-fifa-green text-sm font-medium">
-              ✅ Group stage complete! 32 teams have qualified for the knockout
-              round.
+            <p className="insight-label">Group Stage Complete</p>
+            <p className="insight-text">
+              ✅ 32 teams have qualified for the knockout round.
+              The bracket is ready to simulate.
             </p>
           </motion.div>
         )}
@@ -108,7 +110,7 @@ export default function GroupsPage() {
 
         {/* Group Cards Grid */}
         {!loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {groupKeys.map((g, i) => (
               <GroupCard
                 key={g}

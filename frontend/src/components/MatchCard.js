@@ -1,29 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
+import { getTeamFlag } from "@/lib/teamFlags";
 
-const CODES = {
-  Argentina: "ar", Brazil: "br", France: "fr", England: "gb-eng",
-  Spain: "es", Germany: "de", Portugal: "pt", Netherlands: "nl",
-  Italy: "it", Croatia: "hr", Uruguay: "uy", Morocco: "ma",
-  USA: "us", Colombia: "co", Mexico: "mx", Switzerland: "ch",
-  Senegal: "sn", Japan: "jp", Denmark: "dk", Iran: "ir",
-  "South Korea": "kr", Australia: "au", Ukraine: "ua", Austria: "at",
-  Sweden: "se", Serbia: "rs", Poland: "pl", Peru: "pe",
-  Scotland: "gb-sct", Wales: "gb-wls", Ecuador: "ec", Cameroon: "cm",
-  Hungary: "hu", Canada: "ca", Chile: "cl", Egypt: "eg",
-  Nigeria: "ng", Mali: "ml", "Ivory Coast": "ci", Algeria: "dz",
-  "Saudi Arabia": "sa", Qatar: "qa", Norway: "no",
-  Czechia: "cz", Slovakia: "sk", Romania: "ro", Paraguay: "py",
-  "Costa Rica": "cr", Tunisia: "tn", Ghana: "gh", Bolivia: "bo",
-  "Curaçao": "cw", Haiti: "ht", "New Zealand": "nz",
-  "Bosnia and Herzegovina": "ba", "Cabo Verde": "cv",
-  "Congo DR": "cd", Uzbekistan: "uz", Jordan: "jo",
-  Türkiye: "tr", "South Africa": "za", Iraq: "iq",
-};
-
-function getFlagUrl(name) {
-  const code = CODES[name] || "xx";
-  return `https://flagcdn.com/w40/${code}.png`;
+function handleFlagError(e) {
+  e.target.style.display = "none";
 }
 
 export default function MatchCard({ match, index = 0, compact = false }) {
@@ -47,13 +27,12 @@ export default function MatchCard({ match, index = 0, compact = false }) {
       }}
     >
       <div className="flex items-center justify-between gap-2">
-        {/* Team 1 */}
         <div className={`flex items-center gap-2 flex-1 ${compact ? "" : "min-w-0"}`}>
           <img
-            src={getFlagUrl(match.team1)}
+            src={getTeamFlag(match.team1)}
             alt={match.team1}
-            className={`${compact ? "w-5 h-4" : "w-8 h-6"} object-cover rounded-sm`}
-            onError={(e) => { e.target.style.display = "none"; }}
+            className={`${compact ? "w-5 h-4" : "w-8 h-6"} object-cover rounded-sm border border-white/10`}
+            onError={handleFlagError}
           />
           <div className="min-w-0">
             <p
@@ -69,7 +48,6 @@ export default function MatchCard({ match, index = 0, compact = false }) {
           </div>
         </div>
 
-        {/* Score */}
         <div className="flex-shrink-0 text-center">
           <div
             className={`font-heading font-bold ${
@@ -89,7 +67,6 @@ export default function MatchCard({ match, index = 0, compact = false }) {
           )}
         </div>
 
-        {/* Team 2 */}
         <div className={`flex items-center gap-2 flex-1 justify-end ${compact ? "" : "min-w-0"}`}>
           <div className="min-w-0 text-right">
             <p
@@ -104,15 +81,14 @@ export default function MatchCard({ match, index = 0, compact = false }) {
             )}
           </div>
           <img
-            src={getFlagUrl(match.team2)}
+            src={getTeamFlag(match.team2)}
             alt={match.team2}
-            className={`${compact ? "w-5 h-4" : "w-8 h-6"} object-cover rounded-sm`}
-            onError={(e) => { e.target.style.display = "none"; }}
+            className={`${compact ? "w-5 h-4" : "w-8 h-6"} object-cover rounded-sm border border-white/10`}
+            onError={handleFlagError}
           />
         </div>
       </div>
 
-      {/* Winner bar */}
       {!compact && !isDraw && (
         <motion.div
           initial={{ scaleX: 0 }}

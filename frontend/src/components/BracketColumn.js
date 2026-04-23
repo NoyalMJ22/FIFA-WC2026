@@ -3,25 +3,33 @@ import { motion } from "framer-motion";
 import MatchCard from "./KnockoutMatchCard";
 
 const ROUND_SPACING = {
-  "Round of 32": 2,
-  "Round of 16": 8,
-  "Quarterfinals": 20,
-  "Semifinals": 48,
+  "Round of 32": 4,
+  "Round of 16": 12,
+  "Quarterfinals": 28,
+  "Semifinals": 52,
   "Final": 0,
+};
+
+const ROUND_FLEX_STYLE = {
+  "Round of 32": { justifyContent: "space-between" },
+  "Round of 16": { justifyContent: "space-between" },
+  "Quarterfinals": { justifyContent: "space-between" },
+  "Semifinals": { justifyContent: "center" },
+  "Final": { justifyContent: "center" },
 };
 
 function ConnectorLines({ roundIndex, matchCount, isActive = true }) {
   const spacing = ROUND_SPACING[Object.keys(ROUND_SPACING)[roundIndex]] || 8;
   const height = spacing;
-  const opacity = isActive ? 1 : 0.2;
+  const opacity = isActive ? 0.6 : 0.2;
   
   return (
     <div className={`flex items-center justify-center w-6 px-0.5 ${!isActive ? 'inactive' : ''}`}>
       <svg width="24" height={height + 30} className="overflow-visible" style={{ opacity }}>
         <defs>
           <linearGradient id={`connector-${roundIndex}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00ff87" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.15" />
+            <stop offset="0%" stopColor="#00c8ff" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#00c8ff" stopOpacity="0.15" />
           </linearGradient>
         </defs>
         {matchCount > 1 && (
@@ -29,14 +37,14 @@ function ConnectorLines({ roundIndex, matchCount, isActive = true }) {
             <path
               d={`M 0 12 L 8 12 L 8 ${12 + height/2}`}
               stroke={`url(#connector-${roundIndex})`}
-              strokeWidth="1"
+              strokeWidth="2"
               fill="none"
               strokeLinecap="round"
             />
             <path
               d={`M 0 ${24 + height} L 8 ${24 + height} L 8 ${12 + height/2}`}
               stroke={`url(#connector-${roundIndex})`}
-              strokeWidth="1"
+              strokeWidth="2"
               fill="none"
               strokeLinecap="round"
             />
@@ -46,7 +54,7 @@ function ConnectorLines({ roundIndex, matchCount, isActive = true }) {
               x2="14"
               y2={12 + height/2}
               stroke={`url(#connector-${roundIndex})`}
-              strokeWidth="1"
+              strokeWidth="2"
               strokeLinecap="round"
             />
           </>
@@ -58,7 +66,7 @@ function ConnectorLines({ roundIndex, matchCount, isActive = true }) {
             x2="14"
             y2="15"
             stroke="url(#connector-4)"
-            strokeWidth="1"
+            strokeWidth="2"
             strokeLinecap="round"
           />
         )}
@@ -70,6 +78,7 @@ function ConnectorLines({ roundIndex, matchCount, isActive = true }) {
 export default function BracketColumn({ roundName, matches, roundIndex, side = "left", isActive = true, onMatchClick }) {
   const gap = ROUND_SPACING[roundName] || 4;
   const isFinal = roundName === "Final";
+  const flexStyle = ROUND_FLEX_STYLE[roundName] || { justifyContent: "space-between" };
 
   return (
     <div className={`bracket-round ${!isActive ? 'inactive' : ''}`}>
@@ -84,7 +93,7 @@ export default function BracketColumn({ roundName, matches, roundIndex, side = "
       
       <div 
         className="bracket-round-matches"
-        style={{ gap: `${gap}px` }}
+        style={{ gap: `${gap}px`, ...flexStyle }}
       >
         {matches?.map((match, idx) => (
           <div key={match.match_id || idx} className="bracket-match-row">

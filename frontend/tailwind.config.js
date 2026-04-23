@@ -10,14 +10,15 @@ module.exports = {
       colors: {
         fifa: {
           dark: "#050510",
-          card: "#0f1225",
-          "card-hover": "#151a35",
+          card: "#0c1028",
+          "card-hover": "#111638",
           green: "#00ff87",
+          teal: "#00e5ff",
           purple: "#7c3aed",
           orange: "#f97316",
           gold: "#ffd700",
           muted: "#64748b",
-          border: "#1e293b",
+          border: "#1a2240",
         },
       },
       fontFamily: {

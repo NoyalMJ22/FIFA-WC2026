@@ -9,16 +9,25 @@ import {
 } from "recharts";
 
 const CHART_COLORS = [
-  "#00ff87", "#7c3aed", "#f97316", "#06b6d4", "#ec4899",
-  "#ffd700", "#ef4444", "#22d3ee", "#a78bfa", "#34d399",
+  "#00ff87", "#00e5ff", "#ffd700", "#7c3aed", "#ec4899",
+  "#f97316", "#22d3ee", "#a78bfa", "#34d399", "#ef4444",
 ];
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#0f1225] border border-[#1e293b] p-3 rounded-lg">
-        <p className="text-white font-semibold text-sm">{payload[0].payload.name || payload[0].payload.team}</p>
-        <p className="text-[#00ff87] font-bold">{payload[0].value}%</p>
+      <div style={{
+        background: "rgba(12,16,40,0.95)",
+        border: "1px solid rgba(0,229,255,0.15)",
+        backdropFilter: "blur(12px)",
+        padding: "12px 16px",
+        borderRadius: "10px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+      }}>
+        <p className="text-white font-semibold text-sm">
+          {payload[0].payload.name || payload[0].payload.team}
+        </p>
+        <p className="text-[#00ff87] font-bold text-lg">{payload[0].value}%</p>
       </div>
     );
   }
@@ -53,11 +62,20 @@ export default function StatsPage() {
   const top20 = stats.slice(0, 20);
   const mcTop10 = mcResults?.results?.slice(0, 10) || [];
 
+  // Generate key insight text
+  const getInsight = () => {
+    if (mcTop10.length < 2) return null;
+    const top = mcTop10[0];
+    const runner = mcTop10[1];
+    const gap = (top.percentage - runner.percentage).toFixed(1);
+    return `${top.team} leads with a ${top.percentage}% win probability — ${gap}pp ahead of ${runner.team}. Based on ${mcResults.iterations} simulated tournaments.`;
+  };
+
   return (
     <div className="animated-bg min-h-screen">
       <Navbar />
 
-      <main className="pt-24 pb-16 px-4 max-w-5xl mx-auto">
+      <main className="pt-24 pb-16 px-4 max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -66,7 +84,7 @@ export default function StatsPage() {
         >
           <h1 className="font-heading text-4xl sm:text-5xl font-bold tracking-wider mb-3">
             <span className="text-white">TOURNAMENT </span>
-            <span className="gradient-text-green">ANALYTICS</span>
+            <span className="gradient-text-teal">ANALYTICS</span>
           </h1>
           <p className="text-gray-500 text-sm max-w-md mx-auto">
             Explore team strength ratings and run Monte Carlo simulations.
@@ -80,9 +98,10 @@ export default function StatsPage() {
           transition={{ delay: 0.2 }}
           className="glass-card p-5 sm:p-6 mb-8"
         >
-          <h2 className="font-heading text-lg font-bold tracking-wider mb-4 flex items-center gap-2">
-            <span className="text-fifa-green">📊</span> Team Power Rankings
+          <h2 className="font-heading text-lg font-bold tracking-wider mb-1 flex items-center gap-2">
+            <span className="text-[#00e5ff]">📊</span> Team Power Rankings
           </h2>
+          <p className="text-gray-600 text-xs mb-4">Pre-tournament win probability based on team strength ratings</p>
 
           {loading ? (
             <div className="flex justify-center py-12">
@@ -90,35 +109,35 @@ export default function StatsPage() {
             </div>
           ) : (
             <div className="max-w-3xl mx-auto">
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart 
-                  data={top20} 
-                  layout="vertical" 
+              <ResponsiveContainer width="100%" height={380}>
+                <BarChart
+                  data={top20}
+                  layout="vertical"
                   margin={{ top: 10, right: 20, left: 60, bottom: 10 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={true} vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={true} vertical={false} />
                   <XAxis
                     type="number"
                     domain={[0, 20]}
-                    tick={{ fill: "#64748b", fontSize: 10 }}
-                    axisLine={{ stroke: "#1e293b" }}
+                    tick={{ fill: "#4a5568", fontSize: 10 }}
+                    axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
                     tickLine={false}
                   />
                   <YAxis
                     dataKey="name"
                     type="category"
-                    tick={{ fill: "#e2e8f0", fontSize: 10 }}
-                    axisLine={{ stroke: "#1e293b" }}
+                    tick={{ fill: "#cbd5e0", fontSize: 10 }}
+                    axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
                     tickLine={false}
                     width={55}
                   />
-                  <Tooltip content={<CustomTooltip />} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,229,255,0.04)" }} />
                   <Bar dataKey="probability" radius={[0, 4, 4, 0]} animationDuration={800}>
                     {top20.map((_, index) => (
                       <Cell
                         key={index}
                         fill={CHART_COLORS[index % CHART_COLORS.length]}
-                        fillOpacity={0.85}
+                        fillOpacity={0.8}
                       />
                     ))}
                   </Bar>
@@ -135,55 +154,87 @@ export default function StatsPage() {
           transition={{ delay: 0.4 }}
           className="glass-card p-5 sm:p-6"
         >
-          <h2 className="font-heading text-lg font-bold tracking-wider mb-4 flex items-center gap-2">
-            <span className="text-fifa-purple">🎲</span> Monte Carlo Simulation
+          <h2 className="font-heading text-lg font-bold tracking-wider mb-1 flex items-center gap-2">
+            <span className="text-[#7c3aed]">🎲</span> Monte Carlo Simulation
           </h2>
-          <p className="text-gray-500 text-xs mb-5">
+          <p className="text-gray-600 text-xs mb-5">
             Run the tournament multiple times to compute true win probabilities.
           </p>
 
           {/* Controls */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-5 mb-6">
             <div>
-              <label className="block text-[10px] text-gray-500 mb-1 tracking-wider uppercase">
+              <label className="block text-[10px] text-gray-500 mb-1 tracking-wider uppercase font-semibold">
                 Iterations
               </label>
               <input
                 type="number"
                 value={iterations}
                 onChange={(e) =>
-                  setIterations(
-                    Math.min(5000, Math.max(10, parseInt(e.target.value) || 10))
-                  )
+                  setIterations(Math.min(5000, Math.max(10, parseInt(e.target.value) || 10)))
                 }
-                className="bg-[#050510] border border-[#1e293b] rounded-lg px-3 py-2 text-white text-sm w-24 focus:outline-none focus:border-[#7c3aed]/50"
+                style={{
+                  width: '100px',
+                  height: '50px',
+                  borderRadius: '12px',
+                  textAlign: 'center',
+                  fontSize: '16px',
+                  fontFamily: "'Oswald', sans-serif",
+                  background: 'rgba(5,5,16,0.8)',
+                  border: '1px solid rgba(124,58,237,0.25)',
+                  color: 'white',
+                  outline: 'none',
+                  boxShadow: '0 0 12px rgba(124,58,237,0.1)',
+                }}
               />
             </div>
-            <button
+            <motion.button
               onClick={handleMonteCarlo}
               disabled={mcLoading}
-              className="px-5 py-2 rounded-lg font-heading font-semibold text-xs tracking-wider bg-[#7c3aed] text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all duration-300 hover:scale-105 disabled:opacity-50"
+              style={{ 
+                height: '52px',
+                padding: '0 32px',
+                borderRadius: '14px',
+                background: 'linear-gradient(135deg, #7b5cff, #00c6ff)',
+                border: 'none',
+                boxShadow: '0 0 24px rgba(123,92,255,0.35)',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: '600',
+                fontFamily: "'Oswald', sans-serif",
+                letterSpacing: '0.1em',
+                cursor: mcLoading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
             >
               {mcLoading ? (
                 <span className="flex items-center gap-2">
-                  <span className="spinner !w-3 !h-3 !border-2 !border-white/20 !border-t-white" />
+                  <span className="spinner" style={{ width: 14, height: 14, borderWidth: 2, borderColor: "rgba(255,255,255,0.2)", borderTopColor: "#fff" }} />
                   RUNNING...
                 </span>
               ) : (
-                "🚀 RUN"
+                <>
+                  <span>🚀</span>
+                  <span>RUN</span>
+                </>
               )}
-            </button>
+            </motion.button>
             {mcResults && (
-              <span className="text-[10px] text-gray-500">
-                {mcResults.iterations} iterations
+              <span className="text-[11px] text-gray-500" style={{ marginLeft: '8px' }}>
+                {mcResults.iterations} iterations completed
               </span>
             )}
           </div>
 
-          {/* MC Loading State */}
+          {/* MC Loading */}
           {mcLoading && (
             <div className="flex flex-col items-center py-10 gap-3">
-              <div className="spinner !w-8 !h-8" />
+              <div className="spinner" style={{ width: 32, height: 32 }} />
               <p className="text-gray-500 text-xs animate-pulse">
                 Crunching {iterations} simulations...
               </p>
@@ -197,24 +248,38 @@ export default function StatsPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
+              {/* Key Insight Card */}
+              {getInsight() && (
+                <div className="insight-card mb-6">
+                  <p className="insight-label">💡 Key Insight</p>
+                  <p className="insight-text">{getInsight()}</p>
+                </div>
+              )}
+
               {/* Winner Callout */}
               {mcTop10.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-[#050510] border border-[#ffd700]/20 p-4 rounded-xl text-center mb-6"
+                  className="mb-6 text-center p-5 rounded-xl"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,215,0,0.06), rgba(255,215,0,0.02))",
+                    border: "1px solid rgba(255,215,0,0.15)",
+                  }}
                 >
-                  <p className="text-[10px] text-gray-500 mb-1 tracking-wider uppercase">Most Likely Champion</p>
+                  <p className="text-[10px] text-gray-500 mb-2 tracking-wider uppercase font-semibold">
+                    Most Likely Champion
+                  </p>
                   <img
                     src={mcTop10[0].flag}
                     alt={mcTop10[0].team}
-                    className="w-12 h-8 mx-auto rounded shadow-md mb-2"
+                    className="w-14 h-10 mx-auto rounded shadow-lg mb-2"
                     onError={(e) => { e.target.style.display = "none"; }}
                   />
-                  <p className="font-heading text-xl font-bold gradient-text-gold">
+                  <p className="font-heading text-2xl font-bold gradient-text-gold">
                     {mcTop10[0].team}
                   </p>
-                  <p className="text-fifa-green text-sm font-bold">
+                  <p className="text-[#00ff87] text-lg font-bold font-heading text-glow-green">
                     {mcTop10[0].percentage}% win rate
                   </p>
                 </motion.div>
@@ -224,34 +289,30 @@ export default function StatsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Bar Chart */}
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-3">
-                    TOP 10 — WIN DISTRIBUTION
+                  <h3 className="text-[10px] font-semibold text-gray-500 mb-3 tracking-wider uppercase">
+                    Top 10 — Win Distribution
                   </h3>
-                  <ResponsiveContainer width="100%" height={260}>
+                  <ResponsiveContainer width="100%" height={280}>
                     <BarChart data={mcTop10} margin={{ top: 5, right: 10, left: 0, bottom: 50 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                       <XAxis
                         dataKey="team"
                         tick={{ fill: "#94a3b8", fontSize: 9 }}
                         angle={-35}
                         textAnchor="end"
                         height={45}
-                        axisLine={{ stroke: "#1e293b" }}
+                        axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
                         tickLine={false}
                       />
                       <YAxis
-                        tick={{ fill: "#64748b", fontSize: 10 }}
-                        axisLine={{ stroke: "#1e293b" }}
+                        tick={{ fill: "#4a5568", fontSize: 10 }}
+                        axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
                         tickLine={false}
                       />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Bar dataKey="percentage" radius={[4, 4, 0, 0]}>
+                      <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,229,255,0.04)" }} />
+                      <Bar dataKey="percentage" radius={[4, 4, 0, 0]} animationDuration={800}>
                         {mcTop10.map((_, i) => (
-                          <Cell
-                            key={i}
-                            fill={CHART_COLORS[i % CHART_COLORS.length]}
-                            fillOpacity={0.85}
-                          />
+                          <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} fillOpacity={0.85} />
                         ))}
                       </Bar>
                     </BarChart>
@@ -260,10 +321,10 @@ export default function StatsPage() {
 
                 {/* Pie Chart */}
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-3">
-                    PROBABILITY SHARE
+                  <h3 className="text-[10px] font-semibold text-gray-500 mb-3 tracking-wider uppercase">
+                    Probability Share
                   </h3>
-                  <ResponsiveContainer width="100%" height={260}>
+                  <ResponsiveContainer width="100%" height={280}>
                     <PieChart>
                       <Pie
                         data={mcTop10}
@@ -271,17 +332,13 @@ export default function StatsPage() {
                         nameKey="team"
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={90}
+                        innerRadius={55}
+                        outerRadius={95}
                         paddingAngle={2}
                         stroke="none"
                       >
                         {mcTop10.map((_, i) => (
-                          <Cell
-                            key={i}
-                            fill={CHART_COLORS[i % CHART_COLORS.length]}
-                            fillOpacity={0.85}
-                          />
+                          <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} fillOpacity={0.85} />
                         ))}
                       </Pie>
                       <Tooltip content={<CustomTooltip />} />
@@ -295,15 +352,62 @@ export default function StatsPage() {
                 </div>
               </div>
 
-              {/* Results Table */}
-              <div className="mt-6">
-                <h3 className="text-xs font-semibold text-gray-400 mb-3">
-                  FULL RESULTS
+              {/* Comparison Cards (Top 3) */}
+              {mcTop10.length >= 3 && (
+                <div className="mt-6">
+                  <h3 className="text-[10px] font-semibold text-gray-500 mb-3 tracking-wider uppercase">
+                    Top Contenders — Comparison
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {mcTop10.slice(0, 3).map((team, idx) => (
+                      <motion.div
+                        key={team.team}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="glass-card p-4 text-center"
+                        style={{
+                          borderTop: `2px solid ${CHART_COLORS[idx]}40`,
+                        }}
+                      >
+                        <div className="text-lg mb-1">
+                          {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+                        </div>
+                        <img
+                          src={team.flag}
+                          alt={team.team}
+                          className="w-8 h-6 mx-auto rounded mb-2"
+                          onError={(e) => { e.target.style.display = "none"; }}
+                        />
+                        <p className="font-heading text-sm font-bold text-white tracking-wide">
+                          {team.team}
+                        </p>
+                        <p
+                          className="font-heading text-xl font-bold mt-1"
+                          style={{ color: CHART_COLORS[idx] }}
+                        >
+                          {team.percentage}%
+                        </p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">
+                          {team.wins} / {mcResults.iterations} wins
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="section-sep" />
+
+              {/* Full Results Table */}
+              <div>
+                <h3 className="text-[10px] font-semibold text-gray-500 mb-3 tracking-wider uppercase">
+                  Full Results
                 </h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>
-                      <tr className="border-b border-[#1e293b]/30">
+                      <tr className="border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                         <th className="text-left py-2 text-gray-500 font-medium">#</th>
                         <th className="text-left py-2 text-gray-500 font-medium">Team</th>
                         <th className="text-center py-2 text-gray-500 font-medium">Wins</th>
@@ -314,10 +418,11 @@ export default function StatsPage() {
                       {mcResults.results.map((r, i) => (
                         <motion.tr
                           key={r.team}
-                          initial={{ opacity: 0, x: -10 }}
+                          initial={{ opacity: 0, x: -8 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.02 }}
-                          className="border-b border-[#1e293b]/10 hover:bg-white/[0.02]"
+                          transition={{ delay: i * 0.015 }}
+                          className="border-b hover:bg-white/[0.02] transition-colors"
+                          style={{ borderColor: "rgba(255,255,255,0.03)" }}
                         >
                           <td className="py-2 text-gray-600 font-mono">{i + 1}</td>
                           <td className="py-2 flex items-center gap-2">
@@ -329,7 +434,7 @@ export default function StatsPage() {
                             />
                             <span className="font-medium">{r.team}</span>
                           </td>
-                          <td className="py-2 text-center text-gray-400">{r.wins}</td>
+                          <td className="py-2 text-center text-gray-500">{r.wins}</td>
                           <td className="py-2 text-right">
                             <span
                               className="font-mono font-semibold"

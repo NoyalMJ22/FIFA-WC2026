@@ -1,104 +1,225 @@
 "use client";
 import { motion } from "framer-motion";
+import { getTeamFlag, getShortTeamName } from "@/lib/teamFlags";
 
-const TEAM_FLAGS = {
-  Argentina: "ar", Brazil: "br", France: "fr", England: "gb-eng",
-  Spain: "es", Germany: "de", Portugal: "pt", Netherlands: "nl",
-  Italy: "it", Croatia: "hr", Uruguay: "uy", Morocco: "ma",
-  USA: "us", Colombia: "co", Mexico: "mx", Switzerland: "ch",
-  Senegal: "sn", Japan: "jp", Denmark: "dk", Iran: "ir",
-  "South Korea": "kr", Australia: "au", Ukraine: "ua", Austria: "at",
-  Sweden: "se", Serbia: "rs", Poland: "pl", Peru: "pe",
-  Scotland: "gb-sct", Wales: "gb-wls", Ecuador: "ec", Cameroon: "cm",
-  Hungary: "hu", Canada: "ca", Chile: "cl", Egypt: "eg",
-  Nigeria: "ng", Mali: "ml", "Ivory Coast": "ci", Algeria: "dz",
-  "Saudi Arabia": "sa", Qatar: "qa", Norway: "no",
-  Czechia: "cz", Slovakia: "sk", Romania: "ro", Paraguay: "py",
-  "Costa Rica": "cr", Tunisia: "tn", Ghana: "gh", Bolivia: "bo",
-  "Curaçao": "cw", Haiti: "ht", "New Zealand": "nz",
-  "Bosnia and Herzegovina": "ba", "Cabo Verde": "cv",
-  "Congo DR": "cd", Uzbekistan: "uz", Jordan: "jo",
-  Türkiye: "tr", "South Africa": "za", Iraq: "iq",
-};
-
-function getTeamFlag(name) {
-  const code = TEAM_FLAGS[name] || "xx";
-  return `https://flagcdn.com/w80/${code}.png`;
+/**
+ * TrophyCenter — Center section of the knockout bracket.
+ * Layout: Trophy → Final Score Card → Champion Display
+ * Final card uses SAME design as all bracket match cards.
+ */
+function FireworkParticle({ delay, side }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5, x: side === "left" ? 20 : -20, y: 0 }}
+      animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 1.5], x: side === "left" ? 40 : -40, y: -20 }}
+      transition={{ duration: 1.5, delay, repeat: Infinity, ease: "easeOut" }}
+      className={`absolute ${side === "left" ? "left-4" : "right-4"} top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_10px_#ffd700]`}
+      style={{ 
+        position: 'absolute',
+        background: '#ffd700',
+        borderRadius: '50%',
+        boxShadow: '0 0 10px #ffd700',
+      }}
+    />
+  );
 }
 
 export default function TrophyCenter({ champion, finalMatch }) {
+  const CARD_W = 180;
+  const winner = champion || finalMatch?.winner;
+  const hasFinalMatch = finalMatch?.team1 && finalMatch?.team2;
+
+  const team1IsWinner = finalMatch?.winner === finalMatch?.team1;
+  const team2IsWinner = finalMatch?.winner === finalMatch?.team2;
+
   return (
-    <div className="trophy-center">
+    <div className="flex flex-col items-center justify-center gap-4">
+      {/* Trophy */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="trophy-wrapper"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="relative z-10"
       >
-        <motion.div
-          animate={{ 
-            boxShadow: [
-              "0 0 40px rgba(255, 215, 0, 0.4)",
-              "0 0 80px rgba(255, 215, 0, 0.6)",
-              "0 0 40px rgba(255, 215, 0, 0.4)"
-            ]
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <img src="/trophy.png" alt="Trophy" className="trophy" />
-        </motion.div>
+        <img
+          src="/trophy.png"
+          alt="FIFA World Cup Trophy"
+          className="w-16 mx-auto drop-shadow-[0_0_40px_rgba(255,215,0,0.9)]"
+        />
       </motion.div>
 
-      <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="trophy-title"
-      >
-        <span className="gradient-text-gold">WORLD</span>
-        <br />
-        <span className="gradient-text-gold">CHAMPIONS</span>
-      </motion.h2>
-
-      {finalMatch && (
+      {/* Final Match Card */}
+      {hasFinalMatch && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-          className="final-card"
+          transition={{ delay: 0.3, type: "spring", damping: 15 }}
+          className="relative z-10 mx-auto mt-2 mb-2"
         >
-          <p className="final-label">Final</p>
-          <div className="match-score">
-            <div className={`team ${finalMatch.winner === finalMatch.team1 ? "winner" : ""}`}>
-              <img src={getTeamFlag(finalMatch.team1)} alt={finalMatch.team1} className="team-flag" onError={(e) => e.target.style.display = "none"} />
-              <span className="team-name">{finalMatch.team1}</span>
-              <span className="team-score">{finalMatch.score1 ?? "–"}</span>
-            </div>
-            <div className={`team ${finalMatch.winner === finalMatch.team2 ? "winner" : ""}`}>
-              <img src={getTeamFlag(finalMatch.team2)} alt={finalMatch.team2} className="team-flag" onError={(e) => e.target.style.display = "none"} />
-              <span className="team-name">{finalMatch.team2}</span>
-              <span className="team-score">{finalMatch.score2 ?? "–"}</span>
-            </div>
+          {/* Team 1 */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "6px 8px",
+              borderRadius: "8px",
+              background: team1IsWinner
+                ? "rgba(0,255,135,0.1)"
+                : "transparent",
+            }}
+          >
+            <img
+              src={getTeamFlag(finalMatch.team1, 40)}
+              alt={finalMatch.team1}
+              style={{
+                width: "28px",
+                height: "19px",
+                borderRadius: "3px",
+                objectFit: "cover",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.5)",
+              }}
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+            <span
+              style={{
+                flex: 1,
+                fontFamily: "'Oswald', sans-serif",
+                fontSize: "15px",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                color: team1IsWinner ? "#ffffff" : "rgba(255,255,255,0.75)",
+              }}
+            >
+              {getShortTeamName(finalMatch.team1)}
+            </span>
+            <span
+              style={{
+                fontFamily: "'Oswald', sans-serif",
+                fontSize: "24px",
+                fontWeight: 800,
+                color: team1IsWinner ? "#00ff87" : "rgba(255,255,255,0.45)",
+                textShadow: team1IsWinner
+                  ? "0 0 12px rgba(0,255,135,0.5)"
+                  : "none",
+                minWidth: "22px",
+                textAlign: "right",
+              }}
+            >
+              {finalMatch.score1 ?? "-"}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div
+            style={{
+              height: "1px",
+              background:
+                "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.1) 50%, transparent 95%)",
+              margin: "3px 8px",
+            }}
+          />
+
+          {/* Team 2 */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "6px 8px",
+              borderRadius: "8px",
+              background: team2IsWinner
+                ? "rgba(0,255,135,0.1)"
+                : "transparent",
+            }}
+          >
+            <img
+              src={getTeamFlag(finalMatch.team2, 40)}
+              alt={finalMatch.team2}
+              style={{
+                width: "28px",
+                height: "19px",
+                borderRadius: "3px",
+                objectFit: "cover",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.5)",
+              }}
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+            <span
+              style={{
+                flex: 1,
+                fontFamily: "'Oswald', sans-serif",
+                fontSize: "15px",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                color: team2IsWinner ? "#ffffff" : "rgba(255,255,255,0.75)",
+              }}
+            >
+              {getShortTeamName(finalMatch.team2)}
+            </span>
+            <span
+              style={{
+                fontFamily: "'Oswald', sans-serif",
+                fontSize: "24px",
+                fontWeight: 800,
+                color: team2IsWinner ? "#00ff87" : "rgba(255,255,255,0.45)",
+                textShadow: team2IsWinner
+                  ? "0 0 12px rgba(0,255,135,0.5)"
+                  : "none",
+                minWidth: "22px",
+                textAlign: "right",
+              }}
+            >
+              {finalMatch.score2 ?? "-"}
+            </span>
           </div>
         </motion.div>
       )}
 
-      {champion && (
+      {/* Champion Display */}
+      {winner && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, type: "spring" }}
-          className="winner-card"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, type: "spring", damping: 15 }}
+          className="mx-auto mt-2 text-center relative"
         >
-          <img src={getTeamFlag(champion)} alt={champion} className="winner-flag" onError={(e) => e.target.style.display = "none"} />
-          <p className="winner-name">{champion}</p>
-          <p className="winner-label">2026 WORLD CUP WINNER</p>
+          <FireworkParticle delay={0} side="left" />
+          <FireworkParticle delay={0.3} side="right" />
+          <FireworkParticle delay={0.6} side="left" />
+          <FireworkParticle delay={0.9} side="right" />
+          <img
+            src={getTeamFlag(winner, 64)}
+            alt={winner}
+            className="w-14 h-10 mx-auto rounded-md object-cover"
+          />
+          <p className="font-['Oswald'] text-lg font-bold text-white mt-2">
+            {winner}
+          </p>
+          <p className="font-['Oswald'] text-[9px] font-bold text-yellow-400 tracking-widest uppercase">
+            WORLD CHAMPIONS
+          </p>
         </motion.div>
       )}
 
-      {!champion && !finalMatch && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="tournament-progress">
-          <div className="text-gray-500 text-xs tracking-wider">Tournament in progress...</div>
+      {/* Awaiting state */}
+      {!winner && !hasFinalMatch && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          style={{
+            color: "rgba(255,255,255,0.35)",
+            fontSize: "10px",
+            fontFamily: "'Oswald', sans-serif",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+          }}
+        >
+          AWAITING CHAMPION
         </motion.div>
       )}
     </div>
