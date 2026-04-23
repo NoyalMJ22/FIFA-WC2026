@@ -52,7 +52,7 @@ class MonteCarloRequest(BaseModel):
 
 @app.get("/")
 def root():
-    return {"message": "FIFA WC 2026 Simulator API", "status": "online"}
+    return {"message": "FIFA WC 2026 API is running 🚀"}
 
 
 @app.get("/api/teams")
