@@ -3,7 +3,7 @@
  * All fetch calls to the backend go through these functions.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://fifa-wc2026.onrender.com";
 
 /**
  * Fetch all teams with group assignments and probabilities.

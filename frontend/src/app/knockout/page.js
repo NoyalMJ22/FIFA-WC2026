@@ -12,33 +12,57 @@ export default function KnockoutPage() {
   const [winner, setWinner] = useState(null);
   const [showWinner, setShowWinner] = useState(false);
 
-  function startFireworks() {
-    confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ff87', '#00e5ff'] });
+  function triggerFireworks() {
+    const duration = 2 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0 }
+      });
+
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 70,
+        origin: { x: 1 }
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+
+    confetti({ 
+      particleCount: 100, 
+      spread: 100, 
+      origin: { y: 0.6 }, 
+      colors: ['#ffd700', '#00ff87', '#00e5ff'],
+      ticks: 200
+    });
   }
 
   async function handleSimulate() {
     setShowWinner(false);
+    setWinner(null);
     setLoading(true);
     
     try {
       const result = await simulateTournament();
       setData(result);
       
-      const knockout = result.knockout;
-      const finalMatch = knockout?.rounds?.["Final"]?.[0];
+      console.log("API Response:", result);
       
-      if (finalMatch) {
-        const team1Score = finalMatch.score1 || 0;
-        const team2Score = finalMatch.score2 || 0;
-        
-        const win = team1Score > team2Score ? finalMatch.team1 : finalMatch.team2;
-        
-        console.log("Winner:", win);
-        console.log("Final score:", team1Score, "-", team2Score);
-        
-        setWinner(win);
+      const knockout = result.knockout;
+      
+      if (knockout?.champion) {
+        setWinner(knockout.champion);
         setShowWinner(true);
-        startFireworks();
+        triggerFireworks();
+        console.log("Winner:", knockout.champion);
       }
     } catch (err) {
       console.error("Tournament simulation error:", err);
@@ -51,7 +75,6 @@ export default function KnockoutPage() {
     <div className="animated-bg min-h-screen relative">
       <Navbar />
 
-      {/* Header + Simulate */}
       <div
         style={{
           textAlign: "center",
@@ -118,7 +141,6 @@ export default function KnockoutPage() {
         </motion.button>
       </div>
 
-      {/* Bracket Display */}
       {data && !loading && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -133,7 +155,6 @@ export default function KnockoutPage() {
         </motion.div>
       )}
 
-      {/* Loading State */}
       {loading && (
         <div
           style={{
@@ -159,7 +180,6 @@ export default function KnockoutPage() {
         </div>
       )}
 
-      {/* Empty State */}
       {!data && !loading && (
         <motion.div
           initial={{ opacity: 0 }}
