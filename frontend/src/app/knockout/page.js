@@ -1,205 +1,185 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import KnockoutBracket from "@/components/KnockoutBracket";
 import confetti from "canvas-confetti";
 import { simulateTournament } from "@/lib/api";
+
+function triggerFireworks() {
+  const duration = 3 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: ["#ffd700", "#00ff87", "#00e5ff"],
+    });
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: ["#ffd700", "#00ff87", "#00e5ff"],
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+
+  confetti({
+    particleCount: 80,
+    spread: 100,
+    origin: { y: 0.6 },
+    colors: ["#ffd700", "#00ff87", "#00e5ff"],
+    ticks: 150,
+  });
+}
 
 export default function KnockoutPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [winner, setWinner] = useState(null);
   const [showWinner, setShowWinner] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  function triggerFireworks() {
-    const duration = 2 * 1000;
-    const end = Date.now() + duration;
-
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 70,
-        origin: { x: 0 }
-      });
-
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 70,
-        origin: { x: 1 }
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-
-    confetti({ 
-      particleCount: 100, 
-      spread: 100, 
-      origin: { y: 0.6 }, 
-      colors: ['#ffd700', '#00ff87', '#00e5ff'],
-      ticks: 200
-    });
-  }
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   async function handleSimulate() {
     setShowWinner(false);
     setWinner(null);
     setLoading(true);
-    
+
     try {
       const result = await simulateTournament();
       setData(result);
-      
-      console.log("API Response:", result);
-      
       const knockout = result.knockout;
-      
+
       if (knockout?.champion) {
         setWinner(knockout.champion);
         setShowWinner(true);
         triggerFireworks();
-        console.log("Winner:", knockout.champion);
       }
     } catch (err) {
       console.error("Tournament simulation error:", err);
     }
-    
+
     setLoading(false);
   }
 
   return (
-    <div className="animated-bg min-h-screen relative">
+    <div className="min-h-screen relative overflow-x-hidden">
+      <AnimatedBackground />
       <Navbar />
 
-      <div
-        style={{
-          textAlign: "center",
-          paddingTop: "88px",
-          paddingBottom: "24px",
-          position: "relative",
-          zIndex: 10,
-        }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 pt-20 sm:pt-24"
       >
-        <motion.h1
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="font-heading text-4xl sm:text-5xl font-bold tracking-wider mb-3"
-        >
-          <span style={{ color: "white" }}>KNOCKOUT </span>
-          <span className="gradient-text-gold">BRACKET</span>
-        </motion.h1>
+        <div className="sticky top-16 sm:top-16 z-20 bg-gradient-to-b from-[#030618]/95 via-[#030618]/90 to-transparent pb-4 pt-4 sm:pt-6">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-3 sm:mb-4"
+            >
+              <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-wider mb-2 sm:mb-3">
+                <span className="text-white">KNOCKOUT </span>
+                <span className="gradient-text-gold">BRACKET</span>
+              </h1>
+              <p className="text-white/35 text-[11px] sm:text-xs lg:text-sm max-w-md mx-auto leading-relaxed">
+                Simulate the entire tournament — 48 teams enter, only one lifts the trophy.
+              </p>
+            </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          style={{
-            color: "rgba(255,255,255,0.4)",
-            fontSize: "13px",
-            maxWidth: "500px",
-            margin: "0 auto 20px",
-          }}
-        >
-          Simulate the entire tournament — group stage through to the final.
-          48 teams enter, only one lifts the trophy.
-        </motion.p>
-
-        <motion.button
-          onClick={handleSimulate}
-          disabled={loading}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.98 }}
-          className="btn-primary"
-        >
-          {loading ? (
-            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span
-                className="spinner"
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  borderWidth: "2px",
-                  borderColor: "rgba(0,0,0,0.15)",
-                  borderTopColor: "#000",
-                }}
-              />
-              SIMULATING...
-            </span>
-          ) : data ? (
-            "🔄 SIMULATE AGAIN"
-          ) : (
-            "🏆 SIMULATE FULL TOURNAMENT"
-          )}
-        </motion.button>
-      </div>
-
-      {data && !loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          style={{ position: "relative", zIndex: 10 }}
-        >
-          <KnockoutBracket 
-            knockoutData={data.knockout} 
-            winner={showWinner ? winner : null}
-          />
-        </motion.div>
-      )}
-
-      {loading && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "60px 0",
-            gap: "12px",
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          <div className="spinner" style={{ width: "40px", height: "40px" }} />
-          <p
-            style={{
-              color: "rgba(255,255,255,0.25)",
-              fontSize: "13px",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Running group stage and knockout bracket...
-          </p>
-        </div>
-      )}
-
-      {!data && !loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{
-            textAlign: "center",
-            padding: "40px 0",
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          <div style={{ fontSize: "48px", marginBottom: "12px", opacity: 0.3 }}>
-            ⚽
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex justify-center"
+            >
+              <motion.button
+                onClick={handleSimulate}
+                disabled={loading}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative overflow-hidden px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl font-heading font-semibold text-[12px] sm:text-sm tracking-[0.15em] border-none cursor-pointer bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 text-black shadow-[0_0_30px_rgba(0,255,135,0.35),0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 hover:shadow-[0_0_45px_rgba(0,255,135,0.5),0_6px_20px_rgba(0,0,0,0.4)] min-w-[180px] sm:min-w-[220px]"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {loading ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                      <span>SIMULATING...</span>
+                    </>
+                  ) : data ? (
+                    <>
+                      <span>🔄</span>
+                      <span>SIMULATE AGAIN</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>🏆</span>
+                      <span>SIMULATE TOURNAMENT</span>
+                    </>
+                  )}
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700" />
+              </motion.button>
+            </motion.div>
           </div>
-          <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "13px" }}>
-            Click the button above to simulate the full tournament bracket.
-          </p>
-        </motion.div>
-      )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center py-16 sm:py-20 gap-4"
+            >
+              <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin" />
+              <p className="text-white/25 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium">
+                Running group stage and knockout bracket...
+              </p>
+            </motion.div>
+          ) : data ? (
+            <motion.div
+              key="bracket"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <KnockoutBracket knockoutData={data.knockout} winner={showWinner ? winner : null} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col items-center justify-center py-16 sm:py-24 gap-4"
+            >
+              <div className="text-5xl sm:text-6xl opacity-15">⚽</div>
+              <p className="text-white/20 text-[11px] sm:text-xs tracking-[0.08em] uppercase font-medium text-center max-w-xs">
+                Click the button above to simulate the full tournament bracket
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }

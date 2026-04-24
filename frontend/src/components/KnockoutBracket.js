@@ -1,104 +1,62 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { getTeamFlag, getShortTeamName } from "@/lib/teamFlags";
+import PremiumMatchCard from "./PremiumMatchCard";
+import TrophySection from "./TrophySection";
+import { getTeamFlag } from "@/lib/teamFlags";
 
-function MatchCard({ match, side, isFinal }) {
-  if (!match) return null;
-  
-  const w1 = match.winner === match.team1;
-  const w2 = match.winner === match.team2;
-  const hasTeam1 = match.team1?.trim();
-  const hasTeam2 = match.team2?.trim();
-
-  if (!hasTeam1 && !hasTeam2) return null;
+function RoundConnector({ matchCount }) {
+  const heights = { 8: "40px", 4: "80px", 2: "160px", 1: "320px" };
+  const height = heights[matchCount] || "40px";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: side === "left" ? -10 : 10 }}
-      animate={{ opacity: 1, x: 0 }}
-      whileHover={{ scale: 1.02, y: -2 }}
-      className={`relative z-10 w-[150px] h-[50px] px-2.5 py-1.5 rounded-xl backdrop-blur-md flex flex-col justify-center transition-all duration-300 ${
-        isFinal
-          ? "bg-gradient-to-r from-yellow-500/20 to-yellow-500/10 border-2 border-yellow-400/50 shadow-[0_0_20px_rgba(255,215,0,0.6)] scale-105"
-          : "bg-white/[0.05] border border-white/[0.15] hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(0,255,200,0.3)]"
-      }`}
-      style={{ position: 'relative' }}
-    >
-      {hasTeam1 && (
-        <motion.div 
-          className={`flex items-center justify-between text-xs h-[18px] rounded px-1 ${w1 ? "bg-gradient-to-r from-green-500/30 to-transparent" : ""}`}
-          animate={w1 ? { boxShadow: ["0 0 0 rgba(0,255,150,0)", "0 0 8px rgba(0,255,150,0.5)", "0 0 0 rgba(0,255,150,0)"] } : {}}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <div className="flex items-center gap-1">
-            <img src={getTeamFlag(match.team1)} alt={match.team1} className="w-4 h-2.5 object-cover rounded-sm" />
-            <span className={w1 ? "text-green-400 font-semibold" : "text-white/80"}>{getShortTeamName(match.team1)}</span>
-          </div>
-          <span className={w1 ? "text-green-400 font-bold" : "text-white/50"}>{match.score1 ?? "-"}</span>
-        </motion.div>
-      )}
-      {hasTeam1 && hasTeam2 && <div className="h-px bg-white/20 my-0.5" />}
-      {hasTeam2 && (
-        <motion.div 
-          className={`flex items-center justify-between text-xs h-[18px] rounded px-1 ${w2 ? "bg-gradient-to-r from-green-500/30 to-transparent" : ""}`}
-          animate={w2 ? { boxShadow: ["0 0 0 rgba(0,255,150,0)", "0 0 8px rgba(0,255,150,0.5)", "0 0 0 rgba(0,255,150,0)"] } : {}}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <div className="flex items-center gap-1">
-            <img src={getTeamFlag(match.team2)} alt={match.team2} className="w-4 h-2.5 object-cover rounded-sm" />
-            <span className={w2 ? "text-green-400 font-semibold" : "text-white/80"}>{getShortTeamName(match.team2)}</span>
-          </div>
-          <span className={w2 ? "text-green-400 font-bold" : "text-white/50"}>{match.score2 ?? "-"}</span>
-        </motion.div>
-      )}
-    </motion.div>
+    <div className="flex flex-col items-center justify-center h-full px-1 sm:px-2" style={{ minHeight: height }}>
+      <div className="w-0.5 h-full bg-gradient-to-b from-cyan-400/60 via-cyan-400/30 to-cyan-400/60 shadow-[0_0_8px_rgba(0,255,200,0.4)]" />
+    </div>
   );
 }
 
-const ROUND_GAPS = {
-  8: 12,
-  4: 20,
-  2: 32,
-  1: 40,
-};
-
-function RoundColumn({ matches, label, matchCount }) {
-  const defaultMatches = matches || [];
-  const needsMore = matchCount - defaultMatches.length;
-  const placeholderMatches = needsMore > 0 ? Array(needsMore).fill(null) : [];
-  const gap = ROUND_GAPS[matchCount] || 12;
+function RoundColumn({ matches, label, matchCount, isLeft }) {
+  const gapMap = { 8: "gap-2 sm:gap-3", 4: "gap-4 sm:gap-6", 2: "gap-8 sm:gap-12", 1: "gap-12 sm:gap-16" };
+  const gap = gapMap[matchCount] || "gap-3";
 
   return (
-    <div 
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        height: '100%',
-      }}
-    >
-      <div className="text-[10px] font-semibold text-white/50 tracking-widest uppercase mb-2">{label}</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: `${gap}px`, alignItems: 'center' }}>
-        {[...defaultMatches, ...placeholderMatches].map((match, idx) => (
-          <MatchCard key={match?.match_id || `placeholder-${idx}`} match={match} side="center" />
-        ))}
+    <div className="flex flex-col items-center">
+      <div
+        className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-white/50 tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-3 text-center"
+        style={{ fontFamily: "'Oswald', sans-serif" }}
+      >
+        {label}
+      </div>
+      <div className={`flex flex-col ${gap} items-center justify-center h-full`}>
+        {[...Array(matchCount)].map((_, idx) => {
+          const match = matches[idx];
+          const isSemi = matchCount === 2 && label.toLowerCase().includes("semi");
+          return (
+            <div key={match?.match_id || `empty-${idx}`} className="w-full flex justify-center">
+              <PremiumMatchCard
+                match={match}
+                side={isLeft ? "left" : "right"}
+                isSemi={isSemi}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function HorizontalConnector() {
+function ConnectorLine() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', width: '30px', height: '100%' }}>
-      <div style={{ height: '2px', width: '100%', background: 'rgba(0,255,255,0.6)', boxShadow: '0 0 6px rgba(0,255,255,0.5)' }} />
+    <div className="flex items-center justify-center px-1 sm:px-2 lg:px-3">
+      <div className="w-0.5 h-full bg-gradient-to-b from-cyan-400/70 via-cyan-400/40 to-cyan-400/70 shadow-[0_0_10px_rgba(0,255,200,0.5)]" />
     </div>
   );
 }
 
-function FireworksCanvas({ active }) {
+function Fireworks({ active }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -115,23 +73,24 @@ function FireworksCanvas({ active }) {
     const colors = ["#facc15", "#22d3ee", "#22c55e", "#ffd700"];
 
     function burst(x, y) {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 40; i++) {
         particles.push({
           x,
           y,
           angle: Math.random() * Math.PI * 2,
           speed: Math.random() * 4 + 1,
-          life: 60,
+          life: 50,
+          color: colors[Math.floor(Math.random() * colors.length)],
         });
       }
     }
 
     const intervalId = setInterval(() => {
       burst(
-        window.innerWidth / 2 + (Math.random() * 200 - 100),
-        window.innerHeight / 2 - 120
+        window.innerWidth / 2 + (Math.random() * 300 - 150),
+        window.innerHeight / 3
       );
-    }, 1200);
+    }, 800);
 
     let animationId;
     function animate() {
@@ -148,8 +107,12 @@ function FireworksCanvas({ active }) {
           continue;
         }
 
-        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.fillRect(p.x, p.y, 2, 2);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life / 50;
+        ctx.fill();
+        ctx.globalAlpha = 1;
       }
 
       animationId = requestAnimationFrame(animate);
@@ -160,7 +123,7 @@ function FireworksCanvas({ active }) {
     const timeoutId = setTimeout(() => {
       clearInterval(intervalId);
       if (animationId) cancelAnimationFrame(animationId);
-    }, 6000);
+    }, 5000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -173,7 +136,6 @@ function FireworksCanvas({ active }) {
 
   return (
     <canvas
-      id="fireworks"
       ref={canvasRef}
       style={{
         position: "fixed",
@@ -182,210 +144,264 @@ function FireworksCanvas({ active }) {
         width: "100%",
         height: "100%",
         pointerEvents: "none",
-        zIndex: 1,
+        zIndex: 100,
       }}
     />
   );
 }
 
+function MobileView({ rounds, winner }) {
+  const [activeRound, setActiveRound] = useState("Final");
+
+  const roundTabs = useMemo(() => [
+    { key: "Final", label: "Final" },
+    { key: "Semifinals", label: "Semi" },
+    { key: "Quarterfinals", label: "QF" },
+    { key: "Round of 16", label: "R16" },
+    { key: "Round of 32", label: "R32" },
+  ], []);
+
+  const currentMatches = rounds[activeRound] || [];
+
+  return (
+    <div className="w-full px-3 sm:px-4 pb-4">
+      <div className="flex gap-2 mb-4 overflow-x-auto pb-2 -mx-3 px-3 scrollbar-hide">
+        {roundTabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveRound(tab.key)}
+            className={`flex-shrink-0 px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold tracking-wide transition-all duration-300 ${
+              activeRound === tab.key
+                ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-400/30 shadow-[0_0_15px_rgba(0,255,200,0.2)]"
+                : "bg-white/[0.04] text-white/40 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white/60"
+            }`}
+            style={{ fontFamily: "'Oswald', sans-serif" }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-3 sm:gap-4">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeRound}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col items-center gap-3"
+          >
+            {activeRound === "Final" && (
+              <TrophySection winner={winner} finalMatch={currentMatches[0]} />
+            )}
+
+            {currentMatches.length > 0 && activeRound !== "Final" && (
+              <div className="w-full max-w-[340px] flex flex-col gap-2 sm:gap-3">
+                {currentMatches.map((match, idx) => (
+                  <PremiumMatchCard
+                    key={match?.match_id || idx}
+                    match={match}
+                    isFinal={activeRound === "Final"}
+                    side="center"
+                  />
+                ))}
+              </div>
+            )}
+
+            {!currentMatches.length && activeRound !== "Final" && (
+              <div className="text-center py-8">
+                <p className="text-white/25 text-xs">No matches in this round</p>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 export default function KnockoutBracket({ knockoutData, winner: externalWinner }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [activeRound, setActiveRound] = useState("Final");
+  const [isTablet, setIsTablet] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
   const prevWinnerRef = useRef(null);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 1200);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1280);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
   const winner = externalWinner;
-  const showWinner = !!winner;
+  const rounds = knockoutData?.rounds || {};
+  const finalMatch = rounds["Final"]?.[0];
 
   useEffect(() => {
     if (winner && winner !== prevWinnerRef.current) {
       prevWinnerRef.current = winner;
       setShowFireworks(true);
-      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ff87', '#00e5ff'] });
-      
-      setTimeout(() => setShowFireworks(false), 6000);
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.5 },
+        colors: ["#ffd700", "#00ff87", "#00e5ff"],
+      });
+
+      setTimeout(() => setShowFireworks(false), 5000);
     }
   }, [winner]);
 
-  const rounds = knockoutData?.rounds || {};
-  const finalMatch = rounds["Final"]?.[0];
-
   if (isMobile) {
     return (
-      <div className="p-4">
-        <div className="flex gap-2 mb-4 overflow-x-auto">
-          {["Final", "Semifinals", "Quarterfinals", "Round of 16", "Round of 32"].map((name) => (
-            <button key={name} onClick={() => setActiveRound(name)} className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${activeRound === name ? "bg-cyan-500/20 text-cyan-400" : "bg-white/[0.05] text-white/40"}`}>
-              {name}
-            </button>
-          ))}
+      <>
+        <Fireworks active={showFireworks} />
+        <MobileView rounds={rounds} winner={winner} />
+      </>
+    );
+  }
+
+  if (isTablet) {
+    return (
+      <>
+        <Fireworks active={showFireworks} />
+        <div className="w-full overflow-x-auto px-4 pb-6">
+          <div className="min-w-max flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 py-4">
+            <RoundColumn
+              matches={rounds["Round of 32"]?.slice(0, 8) || []}
+              label="Round of 32"
+              matchCount={8}
+              isLeft
+            />
+            <RoundConnector matchCount={8} />
+            <RoundColumn
+              matches={rounds["Round of 16"]?.slice(0, 4) || []}
+              label="Round of 16"
+              matchCount={4}
+              isLeft
+            />
+            <RoundConnector matchCount={4} />
+            <RoundColumn
+              matches={rounds["Quarterfinals"]?.slice(0, 2) || []}
+              label="Quarterfinals"
+              matchCount={2}
+              isLeft
+            />
+            <RoundConnector matchCount={2} />
+            <RoundColumn
+              matches={rounds["Semifinals"]?.slice(0, 1) || []}
+              label="Semifinals"
+              matchCount={1}
+              isLeft
+            />
+            <ConnectorLine />
+            <div className="py-4">
+              <TrophySection winner={winner} finalMatch={finalMatch} />
+            </div>
+            <ConnectorLine />
+            <RoundColumn
+              matches={rounds["Semifinals"]?.slice(1, 2) || []}
+              label="Semifinals"
+              matchCount={1}
+              isLeft={false}
+            />
+            <RoundConnector matchCount={2} />
+            <RoundColumn
+              matches={rounds["Quarterfinals"]?.slice(2, 4) || []}
+              label="Quarterfinals"
+              matchCount={2}
+              isLeft={false}
+            />
+            <RoundConnector matchCount={4} />
+            <RoundColumn
+              matches={rounds["Round of 16"]?.slice(4, 8) || []}
+              label="Round of 16"
+              matchCount={4}
+              isLeft={false}
+            />
+            <RoundConnector matchCount={8} />
+            <RoundColumn
+              matches={rounds["Round of 32"]?.slice(8, 16) || []}
+              label="Round of 32"
+              matchCount={8}
+              isLeft={false}
+            />
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-3">
-          <div className="text-xs font-semibold text-yellow-400/60">Final</div>
-          {finalMatch && <MatchCard match={finalMatch} side="center" isFinal />}
-          {winner && (
-            <motion.div 
-              initial={{ opacity: 0, translateY: 12 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                marginTop: '18px',
-                textAlign: 'center',
-              }}
-            >
-              <img 
-                src={getTeamFlag(winner)} 
-                alt={winner}
-                style={{
-                  display: 'block',
-                  margin: '0 auto',
-                  width: '48px',
-                  height: '32px',
-                  borderRadius: '4px',
-                  boxShadow: '0 0 12px rgba(255,255,255,0.25)',
-                }}
-              />
-              <h2 style={{ 
-                fontSize: '20px', 
-                fontWeight: '700', 
-                color: '#ffffff', 
-                margin: 0,
-                textAlign: 'center',
-                textShadow: '0 0 8px rgba(255,255,255,0.3)',
-              }}>
-                {winner}
-              </h2>
-              <p style={{ 
-                fontSize: '11px', 
-                letterSpacing: '2px', 
-                color: '#facc15', 
-                margin: 0,
-                textAlign: 'center',
-                textTransform: 'uppercase',
-              }}>
-                WORLD CHAMPIONS
-              </p>
-            </motion.div>
-          )}
-        </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
-      <FireworksCanvas active={showFireworks} />
-      <div 
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '32px 40px',
-          position: 'relative',
-          zIndex: 2,
-        }}
-      >
-        <div style={{ display: 'flex', gap: '80px', alignItems: 'center' }}>
-          <RoundColumn matches={rounds["Round of 32"]?.slice(0, 8) || []} label="R32" matchCount={8} />
-          <RoundColumn matches={rounds["Round of 16"]?.slice(0, 4) || []} label="R16" matchCount={4} />
-          <RoundColumn matches={rounds["Quarterfinals"]?.slice(0, 2) || []} label="QF" matchCount={2} />
-          <RoundColumn matches={rounds["Semifinals"]?.slice(0, 1) || []} label="SF" matchCount={1} />
-        </div>
-
-        <HorizontalConnector />
-
-        <div 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '20px',
-          }}
-        >
-          <motion.img 
-            src="/trophy.png" 
-            alt="Trophy" 
-            className="trophy w-14"
-            style={{ 
-              filter: 'drop-shadow(0 0 25px rgba(250, 204, 21, 0.6))',
-              animation: 'float 2s ease-in-out infinite',
-            }} 
-            animate={{ y: [0, -6, 0] }} 
-            transition={{ duration: 2, repeat: Infinity }}
+      <Fireworks active={showFireworks} />
+      <div className="w-full px-4 lg:px-8 pb-8 overflow-x-auto">
+        <div className="min-w-max flex items-center justify-center gap-3 lg:gap-6 py-4 lg:py-6">
+          <RoundColumn
+            matches={rounds["Round of 32"]?.slice(0, 8) || []}
+            label="Round of 32"
+            matchCount={8}
+            isLeft
           />
-          {finalMatch && <MatchCard match={finalMatch} side="center" isFinal />}
-          
-          {winner && (
-            <motion.div 
-              initial={{ opacity: 0, translateY: 12 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                marginTop: '18px',
-                textAlign: 'center',
-              }}
-            >
-              <img 
-                src={getTeamFlag(winner)} 
-                alt={winner}
-                style={{
-                  display: 'block',
-                  margin: '0 auto',
-                  width: '48px',
-                  height: '32px',
-                  borderRadius: '4px',
-                  boxShadow: '0 0 12px rgba(255,255,255,0.25)',
-                }}
-              />
-              <h2 style={{ 
-                fontSize: '20px', 
-                fontWeight: '700', 
-                color: '#ffffff', 
-                margin: 0,
-                textAlign: 'center',
-                textShadow: '0 0 8px rgba(255,255,255,0.3)',
-              }}>
-                {winner}
-              </h2>
-              <p style={{ 
-                fontSize: '11px', 
-                letterSpacing: '2px', 
-                color: '#facc15', 
-                margin: 0,
-                textAlign: 'center',
-                textTransform: 'uppercase',
-              }}>
-                WORLD CHAMPIONS
-              </p>
-            </motion.div>
-          )}
-        </div>
-
-        <HorizontalConnector />
-
-        <div style={{ display: 'flex', gap: '80px', alignItems: 'center' }}>
-          <RoundColumn matches={rounds["Semifinals"]?.slice(1, 2) || []} label="SF" matchCount={1} />
-          <RoundColumn matches={rounds["Quarterfinals"]?.slice(2, 4) || []} label="QF" matchCount={2} />
-          <RoundColumn matches={rounds["Round of 16"]?.slice(4, 8) || []} label="R16" matchCount={4} />
-          <RoundColumn matches={rounds["Round of 32"]?.slice(8, 16) || []} label="R32" matchCount={8} />
+          <RoundConnector matchCount={8} />
+          <RoundColumn
+            matches={rounds["Round of 16"]?.slice(0, 4) || []}
+            label="Round of 16"
+            matchCount={4}
+            isLeft
+          />
+          <RoundConnector matchCount={4} />
+          <RoundColumn
+            matches={rounds["Quarterfinals"]?.slice(0, 2) || []}
+            label="Quarterfinals"
+            matchCount={2}
+            isLeft
+          />
+          <RoundConnector matchCount={2} />
+          <RoundColumn
+            matches={rounds["Semifinals"]?.slice(0, 1) || []}
+            label="Semifinals"
+            matchCount={1}
+            isLeft
+          />
+          <ConnectorLine />
+          <div className="py-4">
+            <TrophySection winner={winner} finalMatch={finalMatch} />
+          </div>
+          <ConnectorLine />
+          <RoundColumn
+            matches={rounds["Semifinals"]?.slice(1, 2) || []}
+            label="Semifinals"
+            matchCount={1}
+            isLeft={false}
+          />
+          <RoundConnector matchCount={2} />
+          <RoundColumn
+            matches={rounds["Quarterfinals"]?.slice(2, 4) || []}
+            label="Quarterfinals"
+            matchCount={2}
+            isLeft={false}
+          />
+          <RoundConnector matchCount={4} />
+          <RoundColumn
+            matches={rounds["Round of 16"]?.slice(4, 8) || []}
+            label="Round of 16"
+            matchCount={4}
+            isLeft={false}
+          />
+          <RoundConnector matchCount={8} />
+          <RoundColumn
+            matches={rounds["Round of 32"]?.slice(8, 16) || []}
+            label="Round of 32"
+            matchCount={8}
+            isLeft={false}
+          />
         </div>
       </div>
     </>
