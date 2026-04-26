@@ -103,3 +103,111 @@ FIFA-WC2026/
 │   ├── requirements.txt
 │
 │── README.md
+```
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
+
+git clone https://github.com/NoyalMJ22/FIFA-WC2026.git
+cd FIFA-WC2026
+
+## 💻 Frontend Setup
+
+cd frontend
+npm install
+npm run dev
+
+# Runs at:
+# http://localhost:3000
+
+## 🐍 Backend Setup
+
+cd ../backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+# Runs at:
+# http://localhost:8000
+
+## 🔑 Environment Variables
+
+# Create frontend/.env.local
+
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Production:
+
+NEXT_PUBLIC_API_URL=https://fifa-wc2026.onrender.com
+
+## 🧠 Match Simulation Logic
+
+# Team Strength Formula:
+# Strength = Attack + Midfield + Defense
+
+# Prediction Engine Uses:
+# - Relative team power
+# - Random upset chance
+# - Score variance
+# - Knockout pressure factor
+
+## 📱 Fully Responsive
+
+# Optimized for:
+# 💻 Desktop
+# 📱 Android
+# 🍎 iPhone
+# 📲 Tablets
+
+## 🚀 Deployment Guide
+
+# Frontend (Vercel)
+# Import GitHub repo
+# Root Directory = frontend
+# Framework = Next.js
+
+# Backend (Render)
+# Create Web Service
+# Root Directory = backend
+
+## 📸 Screenshots
+
+# Add screenshots here
+
+## 🌟 Future Improvements
+
+# - Live FIFA Rankings API
+# - Real squad database
+# - Player stats integration
+# - Penalty shootout mode
+# - Multiplayer predictions
+# - Theme switcher
+# - Historical World Cup mode
+
+## 👨‍💻 Author
+
+# Noyal Mathew Jain
+# GitHub: https://github.com/NoyalMJ22
+# Passionate about AI, Data Science, and building creative real-world products.
+
+## 📄 License
+
+# MIT License
+
+## ⭐ Support
+
+# If you like this project:
+# ⭐ Star this repository
+# ⚽ Share with football fans
+# 🚀 Connect on LinkedIn
+# 💡 Fork and improve it
+
+## 🏆 Final Note
+
+# This project combines:
+# ✅ Sports
+# ✅ AI Logic
+# ✅ Full Stack Development
+# ✅ UI/UX Design
+# ✅ Real Deployment Experience
+
+A perfect showcase project for internships, placements, and portfolio building
