@@ -1,74 +1,71 @@
+cat > README.md <<'EOF'
+<div align="center">
+
 # 🏆 FIFA World Cup 2026 Simulator
 
-A premium full-stack football tournament simulator that recreates the excitement of the **FIFA World Cup 2026** using modern web technologies, predictive logic, and immersive UI design.
+### ⚽ AI Powered Tournament Predictor • Full Stack Web App • Modern UI
 
-This project simulates the full tournament journey — from group stages to knockout rounds — allowing users to explore different outcomes, brackets, and champions in real time.
+<img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js">
+<img src="https://img.shields.io/badge/FastAPI-Backend-green?style=for-the-badge&logo=fastapi">
+<img src="https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel">
+<img src="https://img.shields.io/badge/Render-API-blue?style=for-the-badge&logo=render">
 
-🌍 Built with **Next.js + FastAPI**, optimized for Desktop, Android, and iOS.
-
----
-
-## 🚀 Live Demo
-
-### 🌐 Frontend
-https://fifa-wcsim2026.vercel.app/
-
-### ⚙️ Backend API
-https://fifa-wc2026.onrender.com
+</div>
 
 ---
 
-# ✨ Key Features
+<style>
+*{
+font-family: Inter, Segoe UI, Arial, sans-serif !important;
+}
 
-## ⚽ Full Tournament Simulation
-- 48 national teams
-- Group stage match generation
-- Automatic standings system
-- Top teams qualify for knockouts
-- Realistic tournament flow
+code, pre{
+font-family: Consolas, monospace !important;
+font-size:14px;
+border-radius:10px;
+}
 
-## 🏆 Knockout Bracket
-- Round of 32
-- Round of 16
-- Quarter Finals
-- Semi Finals
-- Final Match
-- Champion Reveal
-
-## 🎯 Smart Match Prediction
-- Team strength based logic
-- Upset probability system
-- Dynamic score generation
-- Randomized realistic outcomes
-
-## 📊 Team Analytics
-- Strength comparisons
-- Win probability insights
-- Tournament progression stats
-
-## 🎆 Winner Celebration
-- Trophy showcase
-- Country flag display
-- Champion text reveal
-- Fireworks / confetti effects
-
-## 🎨 Premium UI / UX
-- Dark blue neon sports theme
-- Responsive design for all devices
-- Animated background effects
-- Smooth transitions
-- Modern sports-tech visuals
+h1,h2,h3,h4{
+font-weight:700;
+}
+</style>
 
 ---
 
-# 🛠 Tech Stack
+# 🌍 About Project
+
+FIFA World Cup 2026 Simulator is a modern football simulation platform that predicts:
+
+- ⚽ Match Results
+- 🏆 Group Winners
+- 🔥 Knockout Brackets
+- 📊 Team Statistics
+- 🤖 Smart AI Predictions
+
+Built using **Next.js + FastAPI**
+
+---
+
+# ✨ Features
+
+- 🌍 FIFA 2026 Teams Included
+- ⚽ Match Prediction Engine
+- 🏆 Group Stage Simulator
+- 🔥 Knockout Bracket Page
+- 📈 Statistics Dashboard
+- 📱 Fully Responsive
+- 💙 Dark Blue Sports Theme
+- ✨ Smooth Animations
+
+---
+
+# 🛠️ Tech Stack
 
 ## Frontend
 - Next.js 14
 - React.js
 - Tailwind CSS
 - Framer Motion
-- Recharts
 
 ## Backend
 - FastAPI
@@ -77,137 +74,137 @@ https://fifa-wc2026.onrender.com
 - Pandas
 
 ## Deployment
-- Vercel (Frontend)
-- Render (Backend)
+- Vercel
+- Render
 
 ---
 
 # 📁 Project Structure
 
-```bash
+\`\`\`text
 FIFA-WC2026/
-│── frontend/
-│   ├── src/app/
-│   │   ├── groups/
-│   │   ├── knockout/
-│   │   ├── predict/
-│   │   ├── stats/
-│   │   ├── page.js
-│   │   └── layout.js
-│   │
-│   ├── public/
-│   ├── package.json
-│
-│── backend/
-│   ├── main.py
-│   ├── requirements.txt
-│
-│── README.md
-```
-## ⚙️ Installation & Setup
+├── frontend/
+├── backend/
+└── README.md
+\`\`\`
 
-### 1️⃣ Clone Repository
+---
 
+# ⚙️ Installation
+
+## Clone Repo
+
+\`\`\`bash
 git clone https://github.com/NoyalMJ22/FIFA-WC2026.git
 cd FIFA-WC2026
+\`\`\`
 
-## 💻 Frontend Setup
+## Frontend
 
+\`\`\`bash
 cd frontend
 npm install
 npm run dev
+\`\`\`
 
-# Runs at:
-# http://localhost:3000
+## Backend
 
-## 🐍 Backend Setup
-
-cd ../backend
+\`\`\`bash
+cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload
+\`\`\`
 
-# Runs at:
-# http://localhost:8000
+---
 
-## 🔑 Environment Variables
+# 🔑 Environment Variables
 
-# Create frontend/.env.local
+Create frontend/.env.local
 
+\`\`\`env
 NEXT_PUBLIC_API_URL=http://localhost:8000
+\`\`\`
 
-# Production:
+Production:
 
+\`\`\`env
 NEXT_PUBLIC_API_URL=https://fifa-wc2026.onrender.com
+\`\`\`
 
-## 🧠 Match Simulation Logic
+---
 
-# Team Strength Formula:
-# Strength = Attack + Midfield + Defense
+# 🧠 Match Logic
 
-# Prediction Engine Uses:
-# - Relative team power
-# - Random upset chance
-# - Score variance
-# - Knockout pressure factor
+Strength = Attack + Midfield + Defense
 
-## 📱 Fully Responsive
+Uses:
 
-# Optimized for:
-# 💻 Desktop
-# 📱 Android
-# 🍎 iPhone
-# 📲 Tablets
+- Relative Team Power
+- Random Upset Chance
+- Score Variance
+- Knockout Pressure
 
-## 🚀 Deployment Guide
+---
 
-# Frontend (Vercel)
-# Import GitHub repo
-# Root Directory = frontend
-# Framework = Next.js
+# 📱 Responsive
 
-# Backend (Render)
-# Create Web Service
-# Root Directory = backend
+- Desktop
+- Android
+- iPhone
+- Tablet
 
-## 📸 Screenshots
+---
 
-# Add screenshots here
+# 🚀 Deployment
 
-## 🌟 Future Improvements
+## Frontend
+Vercel  
+Root = frontend
 
-# - Live FIFA Rankings API
-# - Real squad database
-# - Player stats integration
-# - Penalty shootout mode
-# - Multiplayer predictions
-# - Theme switcher
-# - Historical World Cup mode
+## Backend
+Render  
+Root = backend
 
-## 👨‍💻 Author
+---
 
-# Noyal Mathew Jain
-# GitHub: https://github.com/NoyalMJ22
-# Passionate about AI, Data Science, and building creative real-world products.
+# 🌟 Future Improvements
 
-## 📄 License
+- Live Rankings API
+- Squad Database
+- Penalty Shootout
+- Multiplayer Mode
+- Theme Switcher
 
-# MIT License
+---
 
-## ⭐ Support
+# 👨‍💻 Author
 
-# If you like this project:
-# ⭐ Star this repository
-# ⚽ Share with football fans
-# 🚀 Connect on LinkedIn
-# 💡 Fork and improve it
+Noyal Mathew Jain
 
-## 🏆 Final Note
+https://github.com/NoyalMJ22
 
-# This project combines:
-# ✅ Sports
-# ✅ AI Logic
-# ✅ Full Stack Development
-# ✅ UI/UX Design
-# ✅ Real Deployment Experience
+---
 
-A perfect showcase project for internships, placements, and portfolio building
+# 📄 License
+
+MIT License
+
+---
+
+# ⭐ Support
+
+Star ⭐  
+Fork 💡  
+Share ⚽
+
+---
+
+# 🏆 Final Note
+
+✅ Sports  
+✅ AI Logic  
+✅ Full Stack  
+✅ UI/UX  
+✅ Deployment
+
+EOF
