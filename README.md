@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00ff87,50:00e5ff,100:7c3aed&height=200&section=header&text=FIFA%20WC%202026%20Simulator&fontSize=42&fontColor=ffffff&fontAlignY=38&desc=48%20Teams.%201%20Trophy.%20Infinite%20Possibilities.&descAlignY=60&descSize=18"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00ff87,50:00e5ff,100:7c3aed&height=220&section=header&text=FIFA%20WC%202026%20Simulator&fontSize=44&fontColor=ffffff&fontAlignY=38&desc=48%20Teams.%201%20Trophy.%20Infinite%20Possibilities.&descAlignY=60&descSize=20"/>
 
 <br/>
 
@@ -8,7 +8,8 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![NumPy](https://img.shields.io/badge/NumPy-Monte%20Carlo-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
 [![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Live](https://img.shields.io/badge/Live-Deployed-00ff87?style=for-the-badge&logo=vercel&logoColor=black)](https://fifa-wc2026.onrender.com)
+[![Vercel](https://img.shields.io/badge/Vercel-Live-black?style=for-the-badge&logo=vercel&logoColor=white)](https://fifa-wcsim2026.vercel.app/)
+[![Render](https://img.shields.io/badge/Render-API-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://fifa-wc2026.onrender.com)
 [![License](https://img.shields.io/badge/License-MIT-ffd700?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -18,12 +19,16 @@
 
 <br/>
 
-[🚀 **Live Demo**](https://fifa-wc2026.onrender.com) &nbsp;·&nbsp;
-[⚽ **Simulate Now**](https://fifa-wc2026.onrender.com/knockout) &nbsp;·&nbsp;
-[📊 **Monte Carlo Stats**](https://fifa-wc2026.onrender.com/stats) &nbsp;·&nbsp;
-[🔮 **Predict a Match**](https://fifa-wc2026.onrender.com/predict)
+[🏠 **Home**](https://fifa-wcsim2026.vercel.app/) &nbsp;·&nbsp;
+[📊 **Groups**](https://fifa-wcsim2026.vercel.app/groups) &nbsp;·&nbsp;
+[⚔️ **Knockout**](https://fifa-wcsim2026.vercel.app/knockout) &nbsp;·&nbsp;
+[🧠 **Predict**](https://fifa-wcsim2026.vercel.app/predict) &nbsp;·&nbsp;
+[📈 **Stats**](https://fifa-wcsim2026.vercel.app/stats)
 
 <br/>
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Noyal%20Mathew%20Jain-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/noyal-mathew-jain-551ab730b/)
+[![GitHub](https://img.shields.io/badge/GitHub-NoyalMJ22-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NoyalMJ22)
 
 </div>
 
@@ -35,12 +40,26 @@ Most World Cup predictions are just vibes dressed up as analysis.
 
 This isn't that.
 
-I built a **probabilistic simulation engine** that runs the entire 2026 World Cup — 48 teams, 12 groups, and the full knockout bracket — and lets you simulate it as many times as you want.
+I built a **full-stack probabilistic simulation engine** that runs the entire FIFA World Cup 2026 — 48 teams, 12 groups, and the complete knockout bracket — and lets you simulate it as many times as you want.
 
 Run it once → one champion.
 Run it **1,000 times** → the truth emerges.
 
 Every simulation is independent. Every tournament tells a different story. Giants crash out. Underdogs make finals. No team wins every time — because that's football.
+
+---
+
+## 🖥️ App Pages
+
+The app has 5 pages — matching the navbar exactly:
+
+| Icon | Page | Description |
+|------|------|-------------|
+| 🏠 | [**Home**](https://fifa-wcsim2026.vercel.app/) | Hero, countdown to June 11, feature cards |
+| 📊 | [**Groups**](https://fifa-wcsim2026.vercel.app/groups) | 12 groups × 4 teams, full round-robin standings |
+| ⚔️ | [**Knockout**](https://fifa-wcsim2026.vercel.app/knockout) | Animated bracket R32 → Final + confetti champion reveal |
+| 🧠 | [**Predict**](https://fifa-wcsim2026.vercel.app/predict) | Head-to-head match predictor for any 2 teams |
+| 📈 | [**Stats**](https://fifa-wcsim2026.vercel.app/stats) | Monte Carlo engine — 1,000+ sim championship probabilities |
 
 ---
 
@@ -53,7 +72,7 @@ Every simulation is independent. Every tournament tells a different story. Giant
 **🏟️ Group Stage Simulator**
 Full round-robin across 12 groups × 4 teams. Real standings with W/D/L, goal difference, and points. Top 2 + best 8 third-placed teams advance.
 
-**🥊 Knockout Bracket**
+**⚔️ Knockout Bracket**
 Full animated symmetric bracket — R32 → R16 → QF → SF → Final. Mirrors a real tournament draw with left/right sides.
 
 **🎲 Monte Carlo Engine**
@@ -62,13 +81,13 @@ Run 1,000+ complete tournaments back-to-back. Get empirical championship probabi
 </td>
 <td width="50%">
 
-**⚡ Head-to-Head Predictor**
+**🧠 Head-to-Head Predictor**
 Pick any 2 teams. Instant probability breakdown. Toggle group stage draw rules on/off.
 
 **🎨 Premium UI**
 Glassmorphism cards · Neon glows · Animated bracket · Confetti + fireworks on champion reveal · Real flags for all 48 nations.
 
-**📊 Analytics Dashboard**
+**📈 Analytics Dashboard**
 Bar charts · Donut charts · Top-3 podium · Full results table · Auto-generated key insights.
 
 </td>
@@ -78,8 +97,6 @@ Bar charts · Donut charts · Top-3 podium · Full results table · Auto-generat
 ---
 
 ## 🧠 How the Simulation Engine Works
-
-This is the core of the project — and the part I'm most proud of.
 
 ### 1️⃣ Head-to-Head Probability Normalization
 ```python
@@ -194,11 +211,11 @@ FIFA-WC2026/
 └── frontend/                         # Next.js 14 frontend (ACTIVE)
     └── src/
         ├── app/
-        │   ├── page.js               # Home — hero, countdown, features
-        │   ├── groups/page.js        # Group stage simulation
-        │   ├── knockout/page.js      # Knockout bracket
-        │   ├── predict/page.js       # Head-to-head predictor
-        │   └── stats/page.js         # Monte Carlo analytics
+        │   ├── page.js               # 🏠 Home
+        │   ├── groups/page.js        # 📊 Groups
+        │   ├── knockout/page.js      # ⚔️ Knockout
+        │   ├── predict/page.js       # 🧠 Predict
+        │   └── stats/page.js         # 📈 Stats
         ├── components/
         │   ├── KnockoutBracket.js    # Full bracket (mobile/tablet/desktop)
         │   ├── PremiumMatchCard.js   # Individual match cards
@@ -227,10 +244,10 @@ FIFA-WC2026/
 
 ## 🌐 Deployment
 
-| Layer | Platform | Status |
-|-------|----------|--------|
-| Backend API | Render | ✅ Live |
-| Frontend | Vercel | ✅ Live |
+| Layer | Platform | URL |
+|-------|----------|-----|
+| Frontend | Vercel | [fifa-wcsim2026.vercel.app](https://fifa-wcsim2026.vercel.app/) |
+| Backend API | Render | [fifa-wc2026.onrender.com](https://fifa-wc2026.onrender.com) |
 
 ---
 
@@ -260,8 +277,9 @@ FIFA-WC2026/
 **Noyal Mathew Jain**
 Student · ML & Data Science Enthusiast · Builder
 
-[![GitHub](https://img.shields.io/badge/GitHub-NoyalMJ22-181717?style=for-the-badge&logo=github)](https://github.com/NoyalMJ22)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/YOUR_LINKEDIN_HERE)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Noyal%20Mathew%20Jain-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/noyal-mathew-jain-551ab730b/)
+[![GitHub](https://img.shields.io/badge/GitHub-NoyalMJ22-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NoyalMJ22)
+[![Live App](https://img.shields.io/badge/Live%20App-Visit-00ff87?style=for-the-badge&logo=vercel&logoColor=black)](https://fifa-wcsim2026.vercel.app/)
 
 *Open to ML / Data Science / Software Engineering roles.*
 *I don't just study this — I build it, ship it, deploy it.*
